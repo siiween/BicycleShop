@@ -1,0 +1,40 @@
+{
+  "name": "bicycle-shop-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register src/index.ts'",
+    "build": "tsc -p .",
+    "serve": "node dist/index.js",
+    "seed": "ts-node -r tsconfig-paths/register src/seeders/seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.6",
+    "express": "^4.21.1",
+    "express-validator": "^7.2.0",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.20"
+  }
+}
