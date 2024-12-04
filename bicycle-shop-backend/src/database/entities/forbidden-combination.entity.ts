@@ -5,7 +5,7 @@ import { BaseEntity } from './base.entity';
 @Entity()
 export class ForbiddenCombination extends BaseEntity {
     @Column()
-    combination_name!: string;
+    name!: string;
 
     @OneToMany(() => ForbiddenCombinationOption, (fco) => fco.forbiddenCombination, { cascade: true })
     forbiddenCombinationOptions!: ForbiddenCombinationOption[];

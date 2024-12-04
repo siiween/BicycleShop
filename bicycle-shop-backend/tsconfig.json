@@ -13,7 +13,7 @@
 
     "baseUrl": "src",
     "paths": {
-      "@entities/*": ["entities/*"],
+      "@entities/*": ["database/entities/*"],
       "@controllers/*": ["controllers/*"],
       "@services/*": ["services/*"],
       "@routes/*": ["routes/*"],
@@ -22,7 +22,8 @@
       "@interfaces/*": ["interfaces/*"],
       "@middlewares/*": ["middlewares/*"],
       "@errors/*": ["errors/*"],
-      "@seeders/*": ["seeders/*"]
+      "@seeders/*": ["seeders/*"],
+      "@database/*": ["database/*"]
     }
   },
   "include": ["src/**/*"],                  // Include all TypeScript files in the src directory

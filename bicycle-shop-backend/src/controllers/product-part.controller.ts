@@ -1,28 +1,15 @@
-// src/controllers/product-part.controller.ts
-
 import { Request, Response, NextFunction } from 'express';
-import { AppDataSource } from '@config/data-source';
-import { ProductPart } from '@entities/product-part.entity';
-import { Product } from '@entities/product.entity';
-import { Part } from '@entities/part.entity';
-import { HttpError } from '@errors/http-error.class';
+import { ProductPartService } from '@services/product-part.service';
 import { ApiResponse } from '@interfaces/api-response.interface';
 
 export class ProductPartController {
     static getAllPartsByProduct = async (req: Request, res: Response, next: NextFunction) => {
         const { productId } = req.params;
         try {
-            const product = await AppDataSource.getRepository(Product).findOne({
-                where: { id: parseInt(productId) },
-                relations: ['productParts', 'productParts.part'],
-            });
-            if (!product) {
-                throw new HttpError(404, 'Product not found');
-            }
-
+            const parts = await ProductPartService.getAllPartsByProduct(parseInt(productId));
             const response: ApiResponse = {
                 success: true,
-                data: product.productParts.map((pp) => pp.part),
+                data: parts,
                 message: 'Parts retrieved successfully',
             };
             res.json(response);
@@ -35,24 +22,10 @@ export class ProductPartController {
         const { productId } = req.params;
         const { partId } = req.body;
         try {
-            const product = await AppDataSource.getRepository(Product).findOneBy({
-                id: parseInt(productId),
-            });
-            if (!product) {
-                throw new HttpError(404, 'Product not found');
-            }
-
-            const part = await AppDataSource.getRepository(Part).findOneBy({ id: parseInt(partId) });
-            if (!part) {
-                throw new HttpError(404, 'Part not found');
-            }
-
-            const productPart = new ProductPart();
-            productPart.product = product;
-            productPart.part = part;
-
-            await AppDataSource.getRepository(ProductPart).save(productPart);
-
+            const productPart = await ProductPartService.associatePartToProduct(
+                parseInt(productId),
+                parseInt(partId)
+            );
             const response: ApiResponse = {
                 success: true,
                 data: productPart,
@@ -67,19 +40,7 @@ export class ProductPartController {
     static disassociatePartFromProduct = async (req: Request, res: Response, next: NextFunction) => {
         const { productId, partId } = req.params;
         try {
-            const productPart = await AppDataSource.getRepository(ProductPart).findOne({
-                where: {
-                    product: { id: parseInt(productId) },
-                    part: { id: parseInt(partId) },
-                },
-            });
-
-            if (!productPart) {
-                throw new HttpError(404, 'Association not found');
-            }
-
-            await AppDataSource.getRepository(ProductPart).remove(productPart);
-
+            await ProductPartService.disassociatePartFromProduct(parseInt(productId), parseInt(partId));
             const response: ApiResponse = {
                 success: true,
                 message: 'Part disassociated from product successfully',

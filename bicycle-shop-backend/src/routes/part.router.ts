@@ -9,6 +9,13 @@ router.get('/', PartController.getAll);
 
 router.get('/:id', param('id').isInt({ gt: 0 }), validate, PartController.getById);
 
+router.get(
+    '/:id/options',
+    param('id').isInt({ gt: 0 }),
+    validate,
+    PartController.getOptionsByPart
+);
+
 router.post(
     '/',
     body('name').isString().notEmpty(),

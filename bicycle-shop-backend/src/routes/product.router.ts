@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { ProductController } from '@controllers/product.controller';
 import { body, param } from 'express-validator';
 import { validate } from '@middlewares/validate.middleware';
+import { upload } from '@middlewares/upload.middleware';
 import productPartRouter from '@routes/product-part.router';
 
 const router = Router();
@@ -17,7 +18,13 @@ const productValidation = [
         .optional()
         .isBoolean().withMessage('is_active must be a boolean'),
     body('category_id')
-        .isInt({ gt: 0 }).withMessage('category_id must be a positive integer'),
+        .isInt({ gt: 0 }).withMessage('Category ID must be a positive integer'),
+    body('image').custom((_, { req }) => {
+        if (!req.file && req.method === 'POST') {
+            throw new Error('Image file is required for creating a product');
+        }
+        return true;
+    }),
 ];
 
 const idValidation = [
@@ -36,16 +43,18 @@ router.get(
 
 router.post(
     '/',
-    ...productValidation,
+    upload.single('image'),
+    productValidation,
     validate,
     ProductController.create
 );
 
 router.put(
     '/:id',
+    upload.single('image'),
     [
         ...idValidation,
-        ...productValidation.map(validator => validator.optional()),
+        ...productValidation.map((validator) => validator.optional()),
     ],
     validate,
     ProductController.update
@@ -57,7 +66,6 @@ router.delete(
     validate,
     ProductController.delete
 );
-
 
 router.use('/:productId/parts', productPartRouter);
 

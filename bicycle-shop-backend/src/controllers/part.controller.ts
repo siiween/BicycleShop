@@ -1,14 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppDataSource } from '@config/data-source';
-import { Part } from '@entities/part.entity';
-import { HttpError } from '@errors/http-error.class';
+import { PartService } from '@services/part.service';
 import { ApiResponse } from '@interfaces/api-response.interface';
 
 export class PartController {
     static getAll = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const parts = await AppDataSource.getRepository(Part).find();
-            const response: ApiResponse<Part[]> = {
+            const parts = await PartService.getAllParts();
+            const response: ApiResponse = {
                 success: true,
                 data: parts,
                 message: 'Parts retrieved successfully',
@@ -22,11 +20,8 @@ export class PartController {
     static getById = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-            const part = await AppDataSource.getRepository(Part).findOneBy({ id: parseInt(id) });
-            if (!part) {
-                throw new HttpError(404, 'Part not found');
-            }
-            const response: ApiResponse<Part> = {
+            const part = await PartService.getPartById(parseInt(id));
+            const response: ApiResponse = {
                 success: true,
                 data: part,
                 message: 'Part retrieved successfully',
@@ -37,16 +32,25 @@ export class PartController {
         }
     };
 
-    static create = async (req: Request, res: Response, next: NextFunction) => {
-        const { name, description } = req.body;
+    static getOptionsByPart = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
         try {
-            const part = new Part();
-            part.name = name;
-            part.description = description;
+            const options = await PartService.getOptionsByPart(parseInt(id));
+            const response: ApiResponse = {
+                success: true,
+                data: options,
+                message: 'Options for part retrieved successfully',
+            };
+            res.json(response);
+        } catch (error) {
+            next(error);
+        }
+    };
 
-            await AppDataSource.getRepository(Part).save(part);
-
-            const response: ApiResponse<Part> = {
+    static create = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const part = await PartService.createPart(req.body);
+            const response: ApiResponse = {
                 success: true,
                 data: part,
                 message: 'Part created successfully',
@@ -59,19 +63,9 @@ export class PartController {
 
     static update = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        const { name, description } = req.body;
         try {
-            const part = await AppDataSource.getRepository(Part).findOneBy({ id: parseInt(id) });
-            if (!part) {
-                throw new HttpError(404, 'Part not found');
-            }
-
-            if (name !== undefined) part.name = name;
-            if (description !== undefined) part.description = description;
-
-            await AppDataSource.getRepository(Part).save(part);
-
-            const response: ApiResponse<Part> = {
+            const part = await PartService.updatePart(parseInt(id), req.body);
+            const response: ApiResponse = {
                 success: true,
                 data: part,
                 message: 'Part updated successfully',
@@ -85,13 +79,7 @@ export class PartController {
     static delete = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-            const part = await AppDataSource.getRepository(Part).findOneBy({ id: parseInt(id) });
-            if (!part) {
-                throw new HttpError(404, 'Part not found');
-            }
-
-            await AppDataSource.getRepository(Part).remove(part);
-
+            await PartService.deletePart(parseInt(id));
             const response: ApiResponse = {
                 success: true,
                 message: 'Part deleted successfully',
