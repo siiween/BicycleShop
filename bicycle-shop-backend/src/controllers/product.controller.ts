@@ -34,10 +34,9 @@ export class ProductController {
 
     static create = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { file } = req;
-            const imageUrl = file ? await uploadImageToS3(file) : undefined;
-
-            const product = await ProductService.createProduct({ ...req.body }, imageUrl);
+            // const { file } = req;
+            // const imageUrl = file ? await uploadImageToS3(file) : undefined;
+            const product = await ProductService.createProduct({ ...req.body });
 
             const response: ApiResponse = {
                 success: true,
@@ -53,10 +52,10 @@ export class ProductController {
     static update = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-            const { file } = req;
-            const imageUrl = file ? await uploadImageToS3(file) : undefined;
+            // const { file } = req;
+            // const imageUrl = file ? await uploadImageToS3(file) : undefined;
 
-            const product = await ProductService.updateProduct(parseInt(id), { ...req.body }, imageUrl);
+            const product = await ProductService.updateProduct(parseInt(id), { ...req.body });
 
             const response: ApiResponse = {
                 success: true,

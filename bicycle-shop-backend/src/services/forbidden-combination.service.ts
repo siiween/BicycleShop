@@ -3,6 +3,7 @@ import { ForbiddenCombination } from '@database/entities/forbidden-combination.e
 import { ForbiddenCombinationOption } from '@database/entities/forbidden-combination-option.entity';
 import { Option } from '@database/entities/option.entity';
 import { HttpError } from '@errors/http-error.class';
+import { In } from 'typeorm';
 
 export class ForbiddenCombinationService {
     static async createCombination(name: string, optionIds: number[]): Promise<ForbiddenCombination> {
@@ -71,18 +72,55 @@ export class ForbiddenCombinationService {
         await AppDataSource.getRepository(ForbiddenCombination).remove(forbiddenCombination);
     }
 
-    static async validateSelection(selectedOptionIds: number[], newOptionId: number): Promise<boolean> {
+
+    static async validateSelection(
+        selectedOptionIds: number[],
+        newOptionId: number
+    ): Promise<{ isValid: boolean; conflictingOptions: number[] }> {
+
         const forbiddenCombinations = await AppDataSource.getRepository(ForbiddenCombination).find({
             relations: ['forbiddenCombinationOptions', 'forbiddenCombinationOptions.option'],
         });
 
-        const invalidCombination = forbiddenCombinations.find((fc) => {
-            const forbiddenOptionIds = fc.forbiddenCombinationOptions.map((fco) => fco.option.id);
-            return selectedOptionIds.includes(newOptionId) && forbiddenOptionIds.includes(newOptionId);
+        const options = await AppDataSource.getRepository(Option).find({
+            where: { id: In([...selectedOptionIds, newOptionId]) },
         });
 
-        return !invalidCombination;
+        const outOfStockOptions = options
+            .filter((option) => option.quantity <= 0)
+            .map((option) => option.id);
+
+        if (outOfStockOptions.length > 0) {
+            return {
+                isValid: false,
+                conflictingOptions: outOfStockOptions,
+            };
+        }
+
+        const updatedSelection = new Set([...selectedOptionIds, newOptionId]);
+
+        const conflictingCombination = forbiddenCombinations.find((fc) => {
+            const forbiddenOptionIds = fc.forbiddenCombinationOptions.map((fco) => fco.option.id);
+            return forbiddenOptionIds.every((id) => updatedSelection.has(id));
+        });
+
+        if (conflictingCombination) {
+            const conflictingOptions = conflictingCombination.forbiddenCombinationOptions.map(
+                (fco) => fco.option.id
+            );
+            return {
+                isValid: false,
+                conflictingOptions,
+            };
+        }
+
+        return {
+            isValid: true,
+            conflictingOptions: [],
+        };
     }
+
+
 
     static async getValidOptions(selectedOptionIds: number[]): Promise<Option[]> {
         const allOptions = await AppDataSource.getRepository(Option).find({

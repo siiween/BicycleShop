@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  bicycle-shop-backend:
+    build:
+      context: ./bicycle-shop-backend
+    command: npm run dev
+    ports:
+      - "3030:3030"
+    volumes:
+      - ./bicycle-shop-backend:/app
+      - ./bicycle-shop-backend/database.sqlite:/app/database.sqlite
+    environment:
+      NODE_ENV: development
+      PORT: 3030
+
+  bicycle-shop-frontend:
+    build:
+      context: ./bicycle-shop-frontend
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./bicycle-shop-frontend:/app
+    environment:
+      NODE_ENV: development
+
+  sqlite:
+    image: nouchka/sqlite3
+    volumes:
+      - ./bicycle-shop-backend/database.sqlite:/data/database.sqlite

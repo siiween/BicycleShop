@@ -2,6 +2,7 @@ export interface OptionResult {
     optionId: number;
     name: string;
     price: number;
+    basePrice: number;
 }
 
 export interface CalculatePriceResponse {

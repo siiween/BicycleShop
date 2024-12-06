@@ -9,6 +9,7 @@ const router = Router();
 
 const productValidation = [
     body('name')
+        .optional()
         .isString().withMessage('Name must be a string')
         .notEmpty().withMessage('Name is required'),
     body('description')
@@ -18,14 +19,10 @@ const productValidation = [
         .optional()
         .isBoolean().withMessage('is_active must be a boolean'),
     body('category_id')
+        .optional()
         .isInt({ gt: 0 }).withMessage('Category ID must be a positive integer'),
-    body('image').custom((_, { req }) => {
-        if (!req.file && req.method === 'POST') {
-            throw new Error('Image file is required for creating a product');
-        }
-        return true;
-    }),
 ];
+
 
 const idValidation = [
     param('id')
@@ -43,18 +40,25 @@ router.get(
 
 router.post(
     '/',
-    upload.single('image'),
-    productValidation,
+    // upload.single('image'),
+    [
+        body('name')
+            .isString().withMessage('Name must be a string')
+            .notEmpty().withMessage('Name is required'),
+        body('category_id')
+            .isInt({ gt: 0 }).withMessage('Category ID must be a positive integer'),
+        ...productValidation
+    ],
     validate,
     ProductController.create
 );
 
 router.put(
     '/:id',
-    upload.single('image'),
+    // upload.single('image'),
     [
         ...idValidation,
-        ...productValidation.map((validator) => validator.optional()),
+        ...productValidation,
     ],
     validate,
     ProductController.update

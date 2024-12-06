@@ -14,7 +14,7 @@ export const validate: RequestHandler = (
             message: 'Validation failed',
             error: errors.array(),
         };
-        console.log('Validation erros', errors.array());
+        console.log('Validation error', errors.array());
         res.status(400).json(response);
         return;
     }

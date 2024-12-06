@@ -75,14 +75,17 @@ export class OptionService {
         const appliedDependencies: Set<number> = new Set();
 
         options.forEach((option) => {
-            let optionPrice = Number(option.price);
+            const basePrice = Number(option.price);
+            let optionPrice = basePrice;
 
-            const applicableDependency = option.dependentPrices.find((dependency) =>
+            const applicableDependencies = option.dependentPrices.filter((dependency) =>
                 selectedOptionIds.includes(dependency.conditionOption.id)
             );
 
-            if (applicableDependency && !appliedDependencies.has(option.id)) {
-                optionPrice = Number(applicableDependency.price);
+            if (applicableDependencies.length > 0 && !appliedDependencies.has(option.id)) {
+                optionPrice = Math.max(
+                    ...applicableDependencies.map((dependency) => Number(dependency.price))
+                );
                 appliedDependencies.add(option.id);
             }
 
@@ -91,10 +94,13 @@ export class OptionService {
             result.push({
                 optionId: option.id,
                 name: option.name,
+                basePrice,
                 price: optionPrice,
             });
         });
 
         return { options: result, total };
     }
+
+
 }
