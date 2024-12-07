@@ -5,11 +5,15 @@ import { ForbiddenCombination } from './forbidden-combination.entity';
 
 @Entity()
 export class ForbiddenCombinationOption extends BaseEntity {
-    @ManyToOne(() => ForbiddenCombination, (fc) => fc.forbiddenCombinationOptions, { onDelete: 'CASCADE' })
+    @ManyToOne(() => ForbiddenCombination, (fc) => fc.forbiddenCombinationOptions, {
+        onDelete: 'CASCADE',
+    })
     @JoinColumn({ name: 'forbidden_combination_id' })
     forbiddenCombination!: ForbiddenCombination;
 
-    @ManyToOne(() => Option, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Option, (option) => option.forbiddenCombinationOptions, {
+        onDelete: 'CASCADE',
+    })
     @JoinColumn({ name: 'option_id' })
     option!: Option;
 }

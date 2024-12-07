@@ -32,10 +32,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        <div className="max-w-7xl p-5 mx-auto flex-1 mt-5">{children}</div>
+        <div className="max-w-7xl p-5 mx-auto flex-1 mt-5 mb-20">
+          {children}
+        </div>
         <ToastContainer
           position="top-right"
-          autoClose={10000}
+          autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

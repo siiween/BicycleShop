@@ -4,6 +4,7 @@ import { ApiResponse } from '@interfaces/api-response.interface';
 
 export class OptionController {
     static createOption = async (req: Request, res: Response, next: NextFunction) => {
+        console.log("parametros: " + req.params);
         const { partId } = req.params;
         try {
             const option = await OptionService.createOption(parseInt(partId), req.body);

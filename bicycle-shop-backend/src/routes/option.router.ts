@@ -24,10 +24,11 @@ const optionBodyValidation = [
 ];
 
 router.post(
-    '/',
+    '/:partId',
     [
         ...partIdValidation,
         body('name').notEmpty().withMessage('Name is required'),
+        body('price').notEmpty().withMessage('Price is required'),
         ...optionBodyValidation,
     ],
     validate,
@@ -49,7 +50,7 @@ router.delete(
 );
 
 router.post(
-    '/calculate',
+    '/price/calculate',
     [
         body('selectedOptionIds')
             .isArray({ min: 1 })

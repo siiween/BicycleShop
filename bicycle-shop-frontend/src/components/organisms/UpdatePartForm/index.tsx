@@ -1,27 +1,19 @@
 'use client';
-import { deleteProduct, updateProduct } from '@/actions/productsActions';
+import { deletePart, updatePart } from '@/actions/partsActions';
 import Button from '@/components/atoms/Button';
-import Input from '@/components/molecules/Input';
-import Select from '@/components/molecules/Select';
 import Text from '@/components/atoms/Text';
-import { Category, Product } from '@/types/apiTypes';
+import Input from '@/components/molecules/Input';
+import { Part } from '@/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function UpdateProductForm({
-  categories,
-  product,
-}: {
-  categories: Category[];
-  product: Product;
-}) {
+export default function UpdatePartForm({ part }: { part: Part }) {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    name: product.name,
-    description: product.description,
-    category_id: product.category.id,
+    name: part.name,
+    description: part.description,
   });
 
   const handleChange = (
@@ -36,7 +28,7 @@ export default function UpdateProductForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!formData.name || !formData.description || !formData.category_id) {
+    if (!formData.name || !formData.description) {
       toast.error('All fields are required');
       return;
     }
@@ -44,38 +36,34 @@ export default function UpdateProductForm({
     const formattedData = {
       name: formData.name,
       description: formData.description,
-      category_id: Number(formData.category_id),
     };
 
     try {
-      const { success } = await updateProduct(
-        formattedData,
-        Number(product.id)
-      );
+      const { success } = await updatePart(formattedData, part.id);
       if (success) {
-        toast.success('Product updated successfully');
-        router.push(`/admin/products/${product.id}`);
+        toast.success('Part updated successfully');
+        router.push(`/admin/parts/${part.id}`);
       } else {
         throw new Error('Failed to update product');
       }
     } catch (error: any) {
       console.error(error.message);
-      toast.error('Failed to update product');
+      toast.error('Failed to update part');
     }
   }
 
   const handleDelete = async () => {
     try {
-      const { success } = await deleteProduct(product.id);
+      const { success } = await deletePart(part.id);
       if (success) {
-        toast.success('Product deleted');
+        toast.success('Part deleted');
         router.push('/admin');
       } else {
-        throw new Error('Error deleting product');
+        throw new Error('Error deleting part');
       }
     } catch (error) {
       console.log(error);
-      toast.error('Error deleting product');
+      toast.error('Error deleting part');
     }
   };
 
@@ -84,10 +72,10 @@ export default function UpdateProductForm({
       <div className="flex flex-row justify-between ">
         <div className="flex flex-row gap-3 items-baseline">
           <Text as="h1" size="3xl" variant="primary" className="font-bold">
-            Edit Product:
+            Edit Part:
           </Text>
           <Text as="h2" size="2xl" variant="secondary" className="font-bold">
-            {product.name}
+            {part.name}
           </Text>
         </div>
         <div className="flex flex-row gap-6">
@@ -96,7 +84,6 @@ export default function UpdateProductForm({
           </Button>
         </div>
       </div>
-
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-lg p-5 border border-neutral-300"
@@ -113,32 +100,16 @@ export default function UpdateProductForm({
               required
             />
           </div>
-          <div>
-            <Select
-              id="category_id"
-              name="category_id"
-              label="Category"
-              value={formData.category_id}
-              onChange={handleChange}
-              required
-              options={categories.map((category) => ({
-                value: category.id,
-                label: category.name,
-              }))}
-              placeholder="Select a category"
-            />
-          </div>
-          <div className="col-span-2">
-            <Input
-              placeholder="Description"
-              id="description"
-              name="description"
-              label="Description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
-          </div>
+
+          <Input
+            placeholder="Description"
+            id="description"
+            name="description"
+            label="Description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="flex justify-end mt-5">
           <Button type="submit" variant="outline">

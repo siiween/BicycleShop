@@ -1,6 +1,7 @@
 import { AppDataSource } from '@config/data-source';
 import { Part } from '@database/entities/part.entity';
 import { Option } from '@entities/option.entity';
+import { ProductPart } from '@entities/product-part.entity';
 import { HttpError } from '@errors/http-error.class';
 
 export class PartService {
@@ -66,15 +67,21 @@ export class PartService {
     }
 
     static async deletePart(id: number): Promise<void> {
-        try {
-            const part = await AppDataSource.getRepository(Part).findOneBy({ id });
-            if (!part) {
-                throw new HttpError(404, 'Part not found');
-            }
+        const partRepository = AppDataSource.getRepository(Part);
 
-            await AppDataSource.getRepository(Part).remove(part);
+        const part = await partRepository.findOne({ where: { id } });
+
+        if (!part) {
+            throw new HttpError(404, 'Part not found');
+        }
+
+        try {
+            await partRepository.remove(part);
         } catch (error) {
+            console.error('Error deleting part:', error);
             throw new HttpError(500, 'Failed to delete part');
         }
     }
+
+
 }

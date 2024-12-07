@@ -45,3 +45,26 @@ export interface CreateProduct extends Record<string, unknown> {
     description: string;
     category_id: number;
 }
+
+
+export interface CreatePart extends Record<string, unknown> {
+    name: string;
+    description: string;
+}
+
+export interface CreateOption extends Record<string, unknown> {
+    name: string;
+    description: string;
+    price: number;
+    quantity: number;
+}
+
+
+export interface ForbiddenCombination {
+    id: number;
+    name: string;
+    forbiddenCombinationOptions: {
+        option: Option,
+        id: number,
+    }[];
+}

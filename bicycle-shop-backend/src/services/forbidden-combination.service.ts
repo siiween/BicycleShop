@@ -6,6 +6,14 @@ import { HttpError } from '@errors/http-error.class';
 import { In } from 'typeorm';
 
 export class ForbiddenCombinationService {
+
+    static async getAllCombinations(): Promise<ForbiddenCombination[]> {
+        return AppDataSource.getRepository(ForbiddenCombination).find({
+            relations: ['forbiddenCombinationOptions', 'forbiddenCombinationOptions.option'],
+        });
+    }
+
+
     static async createCombination(name: string, optionIds: number[]): Promise<ForbiddenCombination> {
         const options = await AppDataSource.getRepository(Option).findByIds(optionIds);
         if (options.length !== optionIds.length) {
@@ -77,10 +85,13 @@ export class ForbiddenCombinationService {
         selectedOptionIds: number[],
         newOptionId: number
     ): Promise<{ isValid: boolean; conflictingOptions: number[] }> {
-
         const forbiddenCombinations = await AppDataSource.getRepository(ForbiddenCombination).find({
             relations: ['forbiddenCombinationOptions', 'forbiddenCombinationOptions.option'],
         });
+
+        const validCombinations = forbiddenCombinations.filter(
+            (fc) => fc.forbiddenCombinationOptions.length > 1
+        );
 
         const options = await AppDataSource.getRepository(Option).find({
             where: { id: In([...selectedOptionIds, newOptionId]) },
@@ -99,7 +110,7 @@ export class ForbiddenCombinationService {
 
         const updatedSelection = new Set([...selectedOptionIds, newOptionId]);
 
-        const conflictingCombination = forbiddenCombinations.find((fc) => {
+        const conflictingCombination = validCombinations.find((fc) => {
             const forbiddenOptionIds = fc.forbiddenCombinationOptions.map((fco) => fco.option.id);
             return forbiddenOptionIds.every((id) => updatedSelection.has(id));
         });
@@ -119,7 +130,6 @@ export class ForbiddenCombinationService {
             conflictingOptions: [],
         };
     }
-
 
 
     static async getValidOptions(selectedOptionIds: number[]): Promise<Option[]> {

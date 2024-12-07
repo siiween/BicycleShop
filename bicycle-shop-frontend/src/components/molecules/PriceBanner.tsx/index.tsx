@@ -3,7 +3,6 @@ import { calculateOptionsPrice } from '@/actions/optionsActions';
 import Text from '@/components/atoms/Text';
 import { OptionsPrice } from '@/types/apiTypes';
 import { Part } from '@/types/storeTypes';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 export default function PriceBanner({
@@ -22,13 +21,9 @@ export default function PriceBanner({
       setLoading(true);
       setError(null);
       try {
-        const {
-          data: { data },
-        } = await axios.post(`http://127.0.0.1:3030/options/calculate`, {
-          selectedOptionIds: Object.values(selectedOptions).map(
-            (option) => option.id
-          ),
-        });
+        const { data } = await calculateOptionsPrice(
+          Object.values(selectedOptions).map((option) => option.id)
+        );
 
         setPrice(data);
       } catch (err: any) {
@@ -76,7 +71,7 @@ export default function PriceBanner({
                 {error ? 'Failed to load prices' : selectedOptionPrice + ' €'}
                 {!error &&
                   selectedOptionBasePrice !== selectedOptionPrice &&
-                  ` (Base: ${selectedOptionBasePrice} €)`}
+                  ` (+${(selectedOptionPrice as number) - (selectedOptionBasePrice || 0)} €)`}
               </Text>
             )}
           </div>

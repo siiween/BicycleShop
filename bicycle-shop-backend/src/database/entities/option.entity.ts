@@ -31,7 +31,7 @@ export class Option extends BaseEntity {
     @Column({ nullable: true })
     image_url?: string;
 
-    @ManyToOne(() => Part, (part) => part.options)
+    @ManyToOne(() => Part, (part) => part.options, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'part_id' })
     part!: Part;
 

@@ -35,3 +35,9 @@ modificar el card para admin de productos
 
 
 modularizar y crear atomos de todo lo que se pueda
+
+
+manejar cargas y tiempos de espera para que sea mas user friendly
+
+
+falla cuando borramos una part con productos ligados

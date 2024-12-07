@@ -42,6 +42,10 @@ const validOptions = [
         .withMessage('Each Selected Option ID must be a positive integer'),
 ]
 
+router.get(
+    '/',
+    ForbiddenCombinationController.getAllCombinations
+);
 
 router.post(
     '/',

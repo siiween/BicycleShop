@@ -1,8 +1,8 @@
 'use client';
 import { createProduct } from '@/actions/productsActions';
 import Button from '@/components/atoms/Button';
-import Input from '@/components/atoms/Input';
-import Select from '@/components/atoms/Select';
+import Input from '@/components/molecules/Input';
+import Select from '@/components/molecules/Select';
 import { Category } from '@/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -45,7 +45,6 @@ export default function CreateProductForm({
     };
 
     try {
-      ('use server');
       const { success, data: newProduct } = await createProduct(formattedData);
       if (success) {
         toast.success('Product created successfully');

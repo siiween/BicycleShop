@@ -27,3 +27,19 @@ export async function createProduct(product: CreateProduct) {
 export async function updateProduct(product: CreateProduct, productId: number) {
     return axiosRequest(`/products/` + productId, product, "PUT");
 }
+
+
+export async function deleteProduct(productId: number) {
+    return axiosRequest(`/products/` + productId, {}, "DELETE");
+}
+
+
+export async function associatePartToProduct(productId: number, partId: number) {
+    return axiosRequest(`/products/${productId}/parts`, {
+        partId: partId
+    }, "POST");
+}
+
+export async function disassociatePartFromProduct(productId: number, partId: number) {
+    return axiosRequest(`/products/${productId}/parts/${partId}`, {}, "DELETE");
+}

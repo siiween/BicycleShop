@@ -1,8 +1,6 @@
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import PartAdminCard from '@/components/molecules/PartAdminCard';
-import ProductAdminCard from '@/components/molecules/ProductAdminCard';
-import { Product } from '@/types/apiTypes';
 import { Part } from '@/types/storeTypes';
 import Link from 'next/link';
 
@@ -13,7 +11,7 @@ export default function AdminParts({ parts }: { parts: Part[] }) {
         <Text as="h1" size="3xl" variant="primary" className="font-bold">
           All the parts in the shop
         </Text>
-        <Link href="/admin/products/create">
+        <Link href="/admin/parts/create">
           <Button className="">Add Part</Button>
         </Link>
       </div>

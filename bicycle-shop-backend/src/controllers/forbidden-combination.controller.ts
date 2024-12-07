@@ -3,6 +3,23 @@ import { ForbiddenCombinationService } from '@services/forbidden-combination.ser
 import { ApiResponse } from '@interfaces/api-response.interface';
 
 export class ForbiddenCombinationController {
+    static getAllCombinations = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const combinations = await ForbiddenCombinationService.getAllCombinations();
+
+            const response: ApiResponse = {
+                success: true,
+                data: combinations,
+                message: 'Forbidden combinations retrieved successfully',
+            };
+
+            res.json(response);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+
     static createCombination = async (req: Request, res: Response, next: NextFunction) => {
         const { name, optionIds } = req.body;
 

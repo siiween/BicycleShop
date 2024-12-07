@@ -17,25 +17,40 @@ export class ProductPartService {
         return product.productParts.map((pp) => pp.part);
     }
 
-    static async associatePartToProduct(productId: number, partId: number): Promise<ProductPart> {
+    static async associatePartToProduct(
+        productId: number,
+        partId: number
+    ): Promise<ProductPart> {
         const product = await AppDataSource.getRepository(Product).findOneBy({
             id: productId,
         });
         if (!product) {
             throw new HttpError(404, 'Product not found');
         }
-
-        const part = await AppDataSource.getRepository(Part).findOneBy({ id: partId });
+        const part = await AppDataSource.getRepository(Part).findOneBy({
+            id: partId,
+        });
         if (!part) {
             throw new HttpError(404, 'Part not found');
         }
+        const existingRelation = await AppDataSource.getRepository(ProductPart).findOne({
+            where: {
+                product: { id: productId },
+                part: { id: partId },
+            },
+            relations: ['product', 'part'],
+        });
 
+        if (existingRelation) {
+            throw new HttpError(400, 'The part is already associated with the product');
+        }
         const productPart = new ProductPart();
         productPart.product = product;
         productPart.part = part;
 
         return await AppDataSource.getRepository(ProductPart).save(productPart);
     }
+
 
     static async disassociatePartFromProduct(productId: number, partId: number): Promise<void> {
         const productPart = await AppDataSource.getRepository(ProductPart).findOne({

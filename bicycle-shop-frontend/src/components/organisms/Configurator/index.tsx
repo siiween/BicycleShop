@@ -1,18 +1,19 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import { useConfiguratorStore } from '@/store/configuratorStore';
 import Button from '@/components/atoms/Button';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/16/solid';
 import { Part } from '@/types/apiTypes';
 import { Option } from '@/types/storeTypes';
-import axios from 'axios';
 import PriceBanner from '@/components/molecules/PriceBanner.tsx';
 import Image from 'next/image';
 import Text from '@/components/atoms/Text';
-import { validateOptionAsync } from '@/actions/validationActions';
 import { formatConflictMessage } from '@/utils/format';
 import { toast } from 'react-toastify';
+import {
+  fetchOptionsByPartId,
+  validateOptions,
+} from '@/actions/optionsActions';
 
 export default function Configurator({
   initialParts,
@@ -44,11 +45,7 @@ export default function Configurator({
       setLoading(true);
       setError(null);
       try {
-        const {
-          data: { data },
-        } = await axios.get(
-          `http://127.0.0.1:3030/parts/${currentPart.id}/options`
-        );
+        const { data } = await fetchOptionsByPartId(currentPart.id);
         setOptions(data);
       } catch (err: any) {
         setError('Failed to load options');
@@ -63,27 +60,29 @@ export default function Configurator({
   }, [currentPart]);
 
   const handleOptionSelect = async (option: Option) => {
-    const { isValid, conflictingOptions } = await validateOptionAsync(
-      selectedOptions,
-      option.id
-    );
+    try {
+      const { data } = await validateOptions(selectedOptions, option.id);
 
-    if (isValid) {
-      selectOption(currentPart.id, option.id, option.name);
-    } else {
-      const conflictingOptionsNames = conflictingOptions
-        .map(
-          (optionId: number) =>
-            Object.values(selectedOptions).find(
-              (option) => option.id === optionId
-            )?.name
-        )
-        .filter((name: string): name is string => name !== undefined);
-      toast.error(
-        `You can't select ${option.name} because you have selected: ${formatConflictMessage(
-          conflictingOptionsNames
-        )}.`
-      );
+      if (data?.isValid) {
+        selectOption(currentPart.id, option.id, option.name);
+      } else {
+        const conflictingOptionsNames = data?.conflictingOptions
+          .map(
+            (optionId: number) =>
+              Object.values(selectedOptions).find(
+                (option) => option.id === optionId
+              )?.name
+          )
+          .filter((name: string): name is string => name !== undefined);
+        toast.error(
+          `You can't select ${option.name} because you have selected: ${formatConflictMessage(
+            conflictingOptionsNames
+          )}.`
+        );
+      }
+    } catch (error) {
+      console.error('Failed to select option', error);
+      toast.error('Failed to select option');
     }
   };
 
