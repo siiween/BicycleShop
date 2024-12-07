@@ -31,7 +31,7 @@ export default function CreateOptionForm({ partId }: { partId: number }) {
     if (
       !formData.name ||
       !formData.description ||
-      formData.price <= 0 ||
+      formData.price < 0 ||
       formData.quantity < 0
     ) {
       toast.error('All fields are required');
@@ -43,11 +43,10 @@ export default function CreateOptionForm({ partId }: { partId: number }) {
       description: formData.description,
       price: Number(formData.price),
       quantity: Number(formData.quantity),
+      is_available: true,
     };
 
     try {
-      console.log(partId, formattedData);
-
       const { success, data: newOption } = await createOption(
         formattedData,
         partId

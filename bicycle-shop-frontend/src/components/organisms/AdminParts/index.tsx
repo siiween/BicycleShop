@@ -1,7 +1,7 @@
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import PartAdminCard from '@/components/molecules/PartAdminCard';
-import { Part } from '@/types/storeTypes';
+import { Part } from '@/types/apiTypes';
 import Link from 'next/link';
 
 export default function AdminParts({ parts }: { parts: Part[] }) {
@@ -24,6 +24,11 @@ export default function AdminParts({ parts }: { parts: Part[] }) {
             href={'/admin/parts/' + part.id}
           />
         ))}
+        {parts.length === 0 && (
+          <Text as="p" size="lg" variant="muted">
+            No parts in the shop
+          </Text>
+        )}
       </div>
     </>
   );

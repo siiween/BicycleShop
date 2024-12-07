@@ -2,7 +2,7 @@
 import { deleteOption } from '@/actions/optionsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
-import { Option } from '@/types/storeTypes';
+import { Option } from '@/types/apiTypes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -47,6 +47,10 @@ export default function OptionAdminCard({
 
         <Text as="p" size="sm" variant="muted">
           Stock: {option.quantity}
+        </Text>
+
+        <Text as="p" size="sm" variant={option.is_available ? 'muted' : 'red'}>
+          {option.is_available ? 'Available' : 'Not available'}
         </Text>
       </div>
 

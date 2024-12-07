@@ -1,14 +1,34 @@
-import Text from '@/components/atoms/Text';
+import {
+  fetchDependentPrices,
+  fetchOptionsById,
+} from '@/actions/optionsActions';
+import { fetchParts } from '@/actions/partsActions';
+import DependentPricesAdmin from '@/components/organisms/DependentPricesAdmin';
+import UpdateOptionForm from '@/components/organisms/UpdateOptionForm';
 
-export default async function OptionsAdminPage() {
+export default async function CreateOptionAdmin({
+  params,
+}: {
+  params: { optionId: number };
+}) {
+  const { optionId } = await params;
+  const { data: option } = await fetchOptionsById(optionId);
+  const { data: dependentPrices } = await fetchDependentPrices(optionId);
+  const { data: parts } = await fetchParts();
+
   return (
-    <main className="flex flex-col gap-5 min-h-screen">
-      <div className="border-b border-neutral-300 pb-5">
-        <Text as="h1" size="3xl" variant="primary" className="font-bold">
-          This is the page of an Option
-        </Text>
+    <main className="flex flex-col min-h-screen gap-10">
+      <div className="flex flex-col gap-3">
+        <UpdateOptionForm option={option} />
       </div>
-      hola hola
+
+      <div className="flex flex-col gap-3">
+        <DependentPricesAdmin
+          dependentPrices={dependentPrices}
+          option={option}
+          parts={parts}
+        />
+      </div>
     </main>
   );
 }

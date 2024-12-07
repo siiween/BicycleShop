@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { OptionController } from '@controllers/option.controller';
 import { body, param } from 'express-validator';
 import { validate } from '@middlewares/validate.middleware';
-import forbiddenCombinationRouter from '@routes/forbidden-combination.router';
 
 
 const router = Router({ mergeParams: true });
@@ -23,6 +22,14 @@ const optionBodyValidation = [
     body('image_url').optional().isURL().withMessage('Image URL must be a valid URL'),
 ];
 
+
+router.get(
+    '/:id',
+    [...optionIdValidation],
+    validate,
+    OptionController.fetchOptionById
+);
+
 router.post(
     '/:partId',
     [
@@ -34,6 +41,7 @@ router.post(
     validate,
     OptionController.createOption
 );
+
 
 router.put(
     '/:id',
@@ -64,7 +72,11 @@ router.post(
 );
 
 
-router.use('/forbidden-combinations', forbiddenCombinationRouter);
-
+router.get(
+    '/:id/dependent-prices',
+    optionIdValidation,
+    validate,
+    OptionController.fetchDependentPrices
+);
 
 export default router;

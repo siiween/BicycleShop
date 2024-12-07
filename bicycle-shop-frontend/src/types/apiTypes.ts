@@ -1,5 +1,3 @@
-import { Option } from "./storeTypes";
-
 export interface Category {
     id: number;
     name: string;
@@ -8,7 +6,16 @@ export interface Category {
     updated_at: string;
 }
 
-
+export interface Option {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    quantity: number;
+    is_available: boolean;
+    image_url: string | null;
+    part: Part;
+}
 export interface Product {
     id: number;
     created_at: string;
@@ -57,6 +64,7 @@ export interface CreateOption extends Record<string, unknown> {
     description: string;
     price: number;
     quantity: number;
+    is_available: boolean;
 }
 
 
@@ -67,4 +75,22 @@ export interface ForbiddenCombination {
         option: Option,
         id: number,
     }[];
+}
+
+export interface DependentPrice {
+    id: number;
+    price: number;
+    option: Option;
+    conditionOption: Option;
+}
+
+export interface CreateDependentPrice extends Record<string, unknown> {
+    price: number;
+    optionId: number;
+    conditionOptionId: number;
+}
+
+export interface CreateForbiddenCombination extends Record<string, unknown> {
+    name: string;
+    optionIds: number[];
 }

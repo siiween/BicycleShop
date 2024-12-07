@@ -14,7 +14,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-5 py-7 flex items-center justify-between">
         <div className="flex items-center gap-16 justify-center">
           <Text as="h1" size="3xl" className="font-bold" variant="white">
-            Bicycle Shop
+            Shop
           </Text>
 
           <ul className="flex flex-row gap-5">

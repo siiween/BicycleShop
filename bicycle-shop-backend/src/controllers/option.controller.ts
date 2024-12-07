@@ -3,6 +3,22 @@ import { OptionService } from '@services/option.service';
 import { ApiResponse } from '@interfaces/api-response.interface';
 
 export class OptionController {
+
+    static fetchOptionById = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        try {
+            const option = await OptionService.fetchOptionById(parseInt(id));
+            const response: ApiResponse = {
+                success: true,
+                data: option,
+                message: 'Option retrieved successfully',
+            };
+            res.json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static createOption = async (req: Request, res: Response, next: NextFunction) => {
         console.log("parametros: " + req.params);
         const { partId } = req.params;
@@ -62,4 +78,19 @@ export class OptionController {
             next(error);
         }
     };
+
+    static fetchDependentPrices = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        try {
+            const result = await OptionService.fetchDependentPrices(parseInt(id));
+            const response: ApiResponse = {
+                success: true,
+                data: result,
+                message: 'Dependent prices retrieved successfully',
+            };
+            res.json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

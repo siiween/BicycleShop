@@ -19,7 +19,7 @@ export default function Modal({
           </Text>
           <Button onClick={onClose}>Close</Button>
         </div>
-        <div className="max-h-96 overflow-y-scroll px-5 py-5">{children}</div>
+        <div className="max-h-2/3 overflow-y-scroll px-5 py-5">{children}</div>
       </div>
     </div>
   );

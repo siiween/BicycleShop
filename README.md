@@ -41,3 +41,9 @@ manejar cargas y tiempos de espera para que sea mas user friendly
 
 
 falla cuando borramos una part con productos ligados
+
+
+si eliminas una opcion o parte y luego vuelves al cofigurador teniendo en el store una configuracion hecha con esa opcion da error porque no la encuentra en la bbdd
+
+
+he creado dependet price como una combinacion de dos opciones pero quiza es mejor una combinacion de dos o mas opciones como forbidden combinations y cuando calculemos el precio busquemos subconjuntos. Tendreiamos una opcion que es la que le cambia el precio y las demas que son las que le aplicaria eso

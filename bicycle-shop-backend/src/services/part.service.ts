@@ -3,6 +3,7 @@ import { Part } from '@database/entities/part.entity';
 import { Option } from '@entities/option.entity';
 import { ProductPart } from '@entities/product-part.entity';
 import { HttpError } from '@errors/http-error.class';
+import { cleanUpForbiddenCombinations } from '@utils/forbidden-combination.utils';
 
 export class PartService {
     static async getAllParts(): Promise<Part[]> {
@@ -30,8 +31,17 @@ export class PartService {
             where: { id },
             relations: ['options'],
         });
-        if (!part) throw new HttpError(404, 'Part not found');
-        return part.options;
+
+        if (!part) {
+            throw new HttpError(404, 'Part not found');
+        }
+
+        const options = await AppDataSource.getRepository(Option).find({
+            where: { part: { id } },
+            relations: ['part'],
+        });
+
+        return options;
     }
 
 
@@ -69,13 +79,19 @@ export class PartService {
     static async deletePart(id: number): Promise<void> {
         const partRepository = AppDataSource.getRepository(Part);
 
-        const part = await partRepository.findOne({ where: { id } });
+        const part = await partRepository.findOne({
+            where: { id },
+            relations: ['options'],
+        });
 
         if (!part) {
             throw new HttpError(404, 'Part not found');
         }
 
         try {
+            for (const option of part.options) {
+                await cleanUpForbiddenCombinations(option.id);
+            }
             await partRepository.remove(part);
         } catch (error) {
             console.error('Error deleting part:', error);

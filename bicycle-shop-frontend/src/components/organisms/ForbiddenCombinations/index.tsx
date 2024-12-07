@@ -15,7 +15,7 @@ export default function ForbiddenCombinations({
         <Text as="h1" size="3xl" variant="primary" className="font-bold">
           All the Forbidden combinations
         </Text>
-        <Link href="/admin/parts/create">
+        <Link href="/admin/forbidden-combinations/create">
           <Button className="">Add a combination</Button>
         </Link>
       </div>
@@ -25,8 +25,14 @@ export default function ForbiddenCombinations({
             key={combination.id}
             name={combination.name}
             options={combination.forbiddenCombinationOptions}
+            id={combination.id}
           />
         ))}
+        {forbiddenCombinations.length === 0 && (
+          <Text as="p" size="lg" variant="muted">
+            No forbidden combinations in the shop
+          </Text>
+        )}
       </div>
     </>
   );

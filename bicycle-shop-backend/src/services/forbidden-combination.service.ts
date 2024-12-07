@@ -9,7 +9,11 @@ export class ForbiddenCombinationService {
 
     static async getAllCombinations(): Promise<ForbiddenCombination[]> {
         return AppDataSource.getRepository(ForbiddenCombination).find({
-            relations: ['forbiddenCombinationOptions', 'forbiddenCombinationOptions.option'],
+            relations: [
+                'forbiddenCombinationOptions',
+                'forbiddenCombinationOptions.option',
+                'forbiddenCombinationOptions.option.part',
+            ],
         });
     }
 
@@ -98,7 +102,7 @@ export class ForbiddenCombinationService {
         });
 
         const outOfStockOptions = options
-            .filter((option) => option.quantity <= 0)
+            .filter((option) => option.quantity <= 0 || option.is_available === false)
             .map((option) => option.id);
 
         if (outOfStockOptions.length > 0) {

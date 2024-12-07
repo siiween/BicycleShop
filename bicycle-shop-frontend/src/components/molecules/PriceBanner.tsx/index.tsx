@@ -1,8 +1,7 @@
 'use client';
 import { calculateOptionsPrice } from '@/actions/optionsActions';
 import Text from '@/components/atoms/Text';
-import { OptionsPrice } from '@/types/apiTypes';
-import { Part } from '@/types/storeTypes';
+import { OptionsPrice, Part } from '@/types/apiTypes';
 import { useEffect, useState } from 'react';
 
 export default function PriceBanner({

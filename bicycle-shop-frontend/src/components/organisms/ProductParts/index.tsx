@@ -1,15 +1,12 @@
 'use client';
-import {
-  associatePartToProduct,
-  disassociatePartFromProduct,
-} from '@/actions/productsActions';
+import { disassociatePartFromProduct } from '@/actions/productsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
-import Modal from '@/components/molecules/Modal';
+import AssociatePartModal from '@/components/molecules/AssociatePartModal';
 import { Part } from '@/types/apiTypes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function ProductParts({
@@ -23,28 +20,6 @@ export default function ProductParts({
 }) {
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
-
-  const filteredAvailableParts = useMemo(() => {
-    const associatedPartIds = parts.map((part) => part.id);
-    return availableParts.filter(
-      (part) => !associatedPartIds.includes(part.id)
-    );
-  }, [parts, availableParts]);
-
-  const handleAssociatePart = async (partId: number) => {
-    try {
-      const { success } = await associatePartToProduct(productId, partId);
-      if (success) {
-        setOpenModal(false);
-        toast.success('Part associated successfully');
-        router.refresh();
-      } else {
-        throw new Error('Failed to associate part');
-      }
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
 
   const handleDisassociatePart = async (partId: number) => {
     try {
@@ -105,38 +80,12 @@ export default function ProductParts({
       </div>
 
       {openModal && (
-        <Modal onClose={() => setOpenModal(false)} title="Select a part">
-          <div>
-            <div className="grid grid-cols-3 gap-5">
-              {filteredAvailableParts.map((part: Part) => (
-                <div
-                  key={part.id}
-                  className="border border-neutral-300 bg-neutral-100 p-5 items-center justify-center flex flex-col gap-5 rounded-lg"
-                >
-                  <Text
-                    as="h3"
-                    size="xl"
-                    variant="primary"
-                    className="font-bold"
-                  >
-                    {part.name}
-                  </Text>
-                  <Text as="p" size="lg" variant="primary">
-                    {part.description}
-                  </Text>
-                  <Button onClick={() => handleAssociatePart(part.id)}>
-                    Associate
-                  </Button>
-                </div>
-              ))}
-            </div>
-            {filteredAvailableParts.length === 0 && (
-              <Text as="p" size="lg" variant="muted">
-                No available parts to associate
-              </Text>
-            )}
-          </div>
-        </Modal>
+        <AssociatePartModal
+          onClose={() => setOpenModal(true)}
+          availableParts={availableParts}
+          parts={parts}
+          productId={productId}
+        />
       )}
     </>
   );

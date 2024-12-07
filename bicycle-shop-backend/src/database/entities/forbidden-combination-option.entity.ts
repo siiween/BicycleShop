@@ -11,9 +11,7 @@ export class ForbiddenCombinationOption extends BaseEntity {
     @JoinColumn({ name: 'forbidden_combination_id' })
     forbiddenCombination!: ForbiddenCombination;
 
-    @ManyToOne(() => Option, (option) => option.forbiddenCombinationOptions, {
-        onDelete: 'CASCADE',
-    })
+    @ManyToOne(() => Option, (option) => option.forbiddenCombinationOptions, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'option_id' })
     option!: Option;
 }

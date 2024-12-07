@@ -15,6 +15,7 @@ const dependentPriceIdValidation = [
     param('id').isInt({ gt: 0 }).withMessage('Dependent Price ID must be a positive integer'),
 ];
 
+
 router.post('/', dependentPriceBodyValidation, validate, DependentPriceController.createDependency);
 
 router.delete('/:id', dependentPriceIdValidation, validate, DependentPriceController.deleteDependency);

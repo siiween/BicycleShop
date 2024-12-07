@@ -4,8 +4,26 @@ import { Part } from '@database/entities/part.entity';
 import { HttpError } from '@errors/http-error.class';
 import { In } from 'typeorm';
 import { CalculatePriceResponse, OptionResult } from '@interfaces/option.interface';
+import { ForbiddenCombinationOption } from '@entities/forbidden-combination-option.entity';
+import { ForbiddenCombination } from '@entities/forbidden-combination.entity';
+import { cleanUpForbiddenCombinations } from '@utils/forbidden-combination.utils';
+import { DependentPrice } from '@entities/dependent-price.entity';
 
 export class OptionService {
+
+
+    static async fetchOptionById(id: number): Promise<Option> {
+        const option = await AppDataSource.getRepository(Option).findOne({
+            where: { id },
+            relations: ['part'],
+        });
+        if (!option) {
+            throw new HttpError(404, 'Option not found');
+        }
+        return option;
+    }
+
+
     static async createOption(
         partId: number,
         data: {
@@ -55,14 +73,26 @@ export class OptionService {
         return await AppDataSource.getRepository(Option).save(option);
     }
 
+
     static async deleteOption(id: number): Promise<void> {
-        const option = await AppDataSource.getRepository(Option).findOneBy({ id });
+        const optionRepository = AppDataSource.getRepository(Option);
+
+        const option = await optionRepository.findOne({
+            where: { id },
+            relations: ['forbiddenCombinationOptions'],
+        });
+
         if (!option) {
             throw new HttpError(404, 'Option not found');
         }
 
-        await AppDataSource.getRepository(Option).remove(option);
+        await cleanUpForbiddenCombinations(id);
+
+        await optionRepository.remove(option);
     }
+
+
+
 
     static async calculatePrice(selectedOptionIds: number[]): Promise<CalculatePriceResponse> {
         const options = await AppDataSource.getRepository(Option).find({
@@ -103,4 +133,17 @@ export class OptionService {
     }
 
 
+
+    static async fetchDependentPrices(optionId: number): Promise<DependentPrice[]> {
+        const dependentPriceRepository = AppDataSource.getRepository(DependentPrice);
+
+        const dependencies = await dependentPriceRepository.find({
+            where: [
+                { option: { id: optionId } },
+            ],
+            relations: ['option', 'option.part', 'conditionOption', 'conditionOption.part'],
+        });
+
+        return dependencies;
+    }
 }

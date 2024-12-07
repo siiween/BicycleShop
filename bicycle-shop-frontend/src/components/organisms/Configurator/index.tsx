@@ -3,17 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useConfiguratorStore } from '@/store/configuratorStore';
 import Button from '@/components/atoms/Button';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/16/solid';
-import { Part } from '@/types/apiTypes';
-import { Option } from '@/types/storeTypes';
+import { Option, Part } from '@/types/apiTypes';
 import PriceBanner from '@/components/molecules/PriceBanner.tsx';
 import Image from 'next/image';
 import Text from '@/components/atoms/Text';
 import { formatConflictMessage } from '@/utils/format';
 import { toast } from 'react-toastify';
-import {
-  fetchOptionsByPartId,
-  validateOptions,
-} from '@/actions/optionsActions';
+import { fetchOptionsByPartId } from '@/actions/optionsActions';
+import { validateOptionsCombinations } from '@/actions/forbiddenCombinationsActions';
 
 export default function Configurator({
   initialParts,
@@ -61,7 +58,10 @@ export default function Configurator({
 
   const handleOptionSelect = async (option: Option) => {
     try {
-      const { data } = await validateOptions(selectedOptions, option.id);
+      const { data } = await validateOptionsCombinations(
+        selectedOptions,
+        option.id
+      );
 
       if (data?.isValid) {
         selectOption(currentPart.id, option.id, option.name);
@@ -75,7 +75,7 @@ export default function Configurator({
           )
           .filter((name: string): name is string => name !== undefined);
         toast.error(
-          `You can't select ${option.name} because you have selected: ${formatConflictMessage(
+          `You can't select ${option.name} because you have selected ${formatConflictMessage(
             conflictingOptionsNames
           )}.`
         );
@@ -86,7 +86,12 @@ export default function Configurator({
     }
   };
 
-  if (!currentPart) return <div>Loading parts...</div>;
+  if (!currentPart && !parts) return <Text>Loading parts...</Text>;
+
+  if (parts.length === 0)
+    return (
+      <Text>You cannot configure this product, please contact the manager</Text>
+    );
 
   return (
     <div className="flex flex-row gap-10">
@@ -121,7 +126,9 @@ export default function Configurator({
                 {options.map((option: Option) => (
                   <button
                     key={option.id}
-                    disabled={option.quantity === 0}
+                    disabled={
+                      option.quantity === 0 || option.is_available === false
+                    }
                     onClick={() => handleOptionSelect(option)}
                     className={`p-3 border rounded-lg hover:shadow-md disabled:bg-neutral-200 disabled:hover:shadow-none ${
                       selectedOptions[currentPart.id]?.id === option.id
@@ -131,13 +138,25 @@ export default function Configurator({
                   >
                     <p>{option.name}</p>
                     <p className="text-xs">{option.description}</p>
-                    {option.quantity === 0 && (
+                    {(option.quantity === 0 ||
+                      option.is_available === false) && (
                       <Text size="xs" className="text-red-500 mt-2">
-                        Out of stock
+                        {!option.is_available
+                          ? 'Not available'
+                          : 'Out of stock'}
                       </Text>
                     )}
                   </button>
                 ))}
+
+                {options.length === 0 && (
+                  <div className="col-span-2">
+                    <Text>
+                      No options available, you cannot continue with the
+                      configuration, contact the manager
+                    </Text>
+                  </div>
+                )}
               </div>
             )}
           </div>

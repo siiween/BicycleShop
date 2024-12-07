@@ -1,7 +1,7 @@
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import OptionAdminCard from '@/components/molecules/OptionAdminCard';
-import { Option } from '@/types/storeTypes';
+import { Option } from '@/types/apiTypes';
 import Link from 'next/link';
 
 export default function PartOptions({

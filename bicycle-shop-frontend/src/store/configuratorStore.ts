@@ -1,16 +1,7 @@
+import { Part } from "@/types/apiTypes";
 import { create } from "zustand";
 
-interface Part {
-    id: number;
-    name: string;
-    description: string;
-}
 
-interface Option {
-    id: number;
-    name: string;
-    price: number;
-}
 
 interface ConfiguratorState {
     currentStep: number;
