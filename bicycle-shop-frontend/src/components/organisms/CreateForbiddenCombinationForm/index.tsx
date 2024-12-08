@@ -2,18 +2,20 @@
 import { createForbiddenCombination } from '@/actions/forbiddenCombinationsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
-import Input from '@/components/molecules/Input';
+import Input from '@/components/atoms/Input';
 import OptionEasySelector from '@/components/molecules/OptionEasySelector';
 import { Option, Part } from '@/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function CreateForbiddenCombinationForm({
-  parts,
-}: {
+interface CreateForbiddenCombinationFormProps {
   parts: Part[];
-}) {
+}
+
+const CreateForbiddenCombinationForm: React.FC<
+  CreateForbiddenCombinationFormProps
+> = ({ parts }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -134,4 +136,6 @@ export default function CreateForbiddenCombinationForm({
       </div>
     </form>
   );
-}
+};
+
+export default CreateForbiddenCombinationForm;

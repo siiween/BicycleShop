@@ -3,12 +3,12 @@
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Text from '@/components/atoms/Text';
 import Button from '@/components/atoms/Button';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import Cart from '../Cart';
+import NavLink from '@/components/atoms/NavLink';
 
-export default function Navbar() {
+const Navbar: React.FC = () => {
   const pathname = usePathname();
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -23,40 +23,29 @@ export default function Navbar() {
 
             <ul className="flex flex-row gap-5">
               <li>
-                <Link href="/">
-                  <Text
-                    variant={
-                      pathname === '/' ||
-                      pathname.startsWith('/products') ||
-                      pathname.startsWith('/configurator')
-                        ? 'red'
-                        : 'white'
-                    }
-                    className="font-bold"
-                  >
-                    Home
-                  </Text>
-                </Link>
+                <NavLink
+                  title="Home"
+                  active={
+                    pathname === '/' ||
+                    pathname.startsWith('/products') ||
+                    pathname.startsWith('/configurator')
+                  }
+                  to="/"
+                />
               </li>
               <li>
-                <Link href="/admin">
-                  <Text
-                    variant={pathname.startsWith('/admin') ? 'red' : 'white'}
-                    className="font-bold"
-                  >
-                    Admin
-                  </Text>
-                </Link>
+                <NavLink
+                  title="Admin"
+                  active={pathname.startsWith('/admin')}
+                  to="/admin"
+                />
               </li>
               <li>
-                <Link href="/contact">
-                  <Text
-                    variant={pathname.startsWith('/contact') ? 'red' : 'white'}
-                    className="font-bold"
-                  >
-                    Contact
-                  </Text>
-                </Link>
+                <NavLink
+                  title="Contact"
+                  active={pathname.startsWith('/contact')}
+                  to="/contact"
+                />
               </li>
             </ul>
           </div>
@@ -70,4 +59,6 @@ export default function Navbar() {
       {isCartOpen && <Cart onClose={() => setIsCartOpen(false)} />}
     </>
   );
-}
+};
+
+export default Navbar;

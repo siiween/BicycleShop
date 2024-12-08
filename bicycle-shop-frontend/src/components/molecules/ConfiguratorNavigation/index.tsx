@@ -7,15 +7,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-export default function ConfiguratorNavigation({
-  previousStep,
-  nextStep,
-  currentStep,
-  parts,
-  selectedOptions,
-  currentPart,
-  product,
-}: {
+interface ConfiguratorNavigationProps {
   previousStep: () => void;
   nextStep: () => void;
   currentStep: number;
@@ -23,7 +15,17 @@ export default function ConfiguratorNavigation({
   selectedOptions: Record<number, Option>;
   currentPart: Part;
   product: Product;
-}) {
+}
+
+const ConfiguratorNavigation: React.FC<ConfiguratorNavigationProps> = ({
+  previousStep,
+  nextStep,
+  currentStep,
+  parts,
+  selectedOptions,
+  currentPart,
+  product,
+}) => {
   const { addProduct } = useShoppingCart();
   const { reset } = useConfiguratorStore();
   const router = useRouter();
@@ -34,7 +36,6 @@ export default function ConfiguratorNavigation({
         selectedOptions,
         product.id
       );
-
       if (!success) {
         toast.error(message);
         return;
@@ -78,4 +79,6 @@ export default function ConfiguratorNavigation({
       )}
     </div>
   );
-}
+};
+
+export default ConfiguratorNavigation;

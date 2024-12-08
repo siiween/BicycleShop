@@ -4,13 +4,12 @@ import OptionAdminCard from '@/components/molecules/OptionAdminCard';
 import { Option } from '@/types/apiTypes';
 import Link from 'next/link';
 
-export default function PartOptions({
-  options,
-  partId,
-}: {
+interface PartOptionsProps {
   options: Option[];
   partId: number;
-}) {
+}
+
+const PartOptions: React.FC<PartOptionsProps> = ({ options, partId }) => {
   return (
     <>
       <div className="flex flex-row justify-between">
@@ -36,4 +35,6 @@ export default function PartOptions({
       </div>
     </>
   );
-}
+};
+
+export default PartOptions;

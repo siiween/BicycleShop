@@ -7,15 +7,20 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import OptionMiniCard from '../OptionMiniCard';
 
-export default function ForbiddenCombinationCard({
+interface ForbiddenCombinationCardProps {
+  name: string;
+  options: {
+    id: number;
+    option: Option;
+  }[];
+  id: number;
+}
+
+const ForbiddenCombinationCard: React.FC<ForbiddenCombinationCardProps> = ({
   name,
   options,
   id,
-}: {
-  name: string;
-  options: { id: number; option: Option }[];
-  id: number;
-}) {
+}) => {
   const router = useRouter();
   const handleDelete = async () => {
     try {
@@ -59,4 +64,6 @@ export default function ForbiddenCombinationCard({
       </div>
     </div>
   );
-}
+};
+
+export default ForbiddenCombinationCard;

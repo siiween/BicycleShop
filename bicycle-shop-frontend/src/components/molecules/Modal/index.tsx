@@ -1,15 +1,13 @@
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 
-export default function Modal({
-  children,
-  onClose,
-  title,
-}: {
+interface ModalProps {
   children: React.ReactNode;
   onClose: () => void;
   title?: string;
-}) {
+}
+
+const Modal: React.FC<ModalProps> = ({ children, onClose, title }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg w-1/2 ">
@@ -23,4 +21,6 @@ export default function Modal({
       </div>
     </div>
   );
-}
+};
+
+export default Modal;

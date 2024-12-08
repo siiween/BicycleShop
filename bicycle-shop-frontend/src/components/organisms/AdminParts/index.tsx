@@ -4,7 +4,11 @@ import PartAdminCard from '@/components/molecules/PartAdminCard';
 import { Part } from '@/types/apiTypes';
 import Link from 'next/link';
 
-export default function AdminParts({ parts }: { parts: Part[] }) {
+interface AdminPartsProps {
+  parts: Part[];
+}
+
+const AdminParts: React.FC<AdminPartsProps> = ({ parts }) => {
   return (
     <>
       <div className="flex flex-row justify-between mb-5">
@@ -32,4 +36,6 @@ export default function AdminParts({ parts }: { parts: Part[] }) {
       </div>
     </>
   );
-}
+};
+
+export default AdminParts;

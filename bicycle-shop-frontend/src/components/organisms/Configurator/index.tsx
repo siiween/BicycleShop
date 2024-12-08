@@ -5,19 +5,21 @@ import { Option, Part, Product } from '@/types/apiTypes';
 import PriceBanner from '@/components/molecules/PriceBanner.tsx';
 import Image from 'next/image';
 import Text from '@/components/atoms/Text';
-import { formatConflictMessage } from '@/utils/format';
+import { formatConflictMessage } from '@/lib/format';
 import { toast } from 'react-toastify';
 import { fetchOptionsByPartId } from '@/actions/optionsActions';
 import { validateOptionsCombinations } from '@/actions/forbiddenCombinationsActions';
 import ConfiguratorNavigation from '@/components/molecules/ConfiguratorNavigation';
 
-export default function Configurator({
-  initialParts,
-  product,
-}: {
+interface ConfiguratorProps {
   initialParts: Part[];
   product: Product;
-}) {
+}
+
+const Configurator: React.FC<ConfiguratorProps> = ({
+  initialParts,
+  product,
+}) => {
   const {
     currentStep,
     parts,
@@ -182,4 +184,6 @@ export default function Configurator({
       <PriceBanner selectedOptions={selectedOptions} parts={parts} />
     </div>
   );
-}
+};
+
+export default Configurator;

@@ -1,21 +1,23 @@
 'use client';
 import { deleteProduct, updateProduct } from '@/actions/productsActions';
 import Button from '@/components/atoms/Button';
-import Input from '@/components/molecules/Input';
-import Select from '@/components/molecules/Select';
+import Input from '@/components/atoms/Input';
+import Select from '@/components/atoms/Select';
 import Text from '@/components/atoms/Text';
 import { Category, Product } from '@/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function UpdateProductForm({
-  categories,
-  product,
-}: {
+interface UpdateProductFormProps {
   categories: Category[];
   product: Product;
-}) {
+}
+
+const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
+  categories,
+  product,
+}) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -148,4 +150,6 @@ export default function UpdateProductForm({
       </form>
     </>
   );
-}
+};
+
+export default UpdateProductForm;

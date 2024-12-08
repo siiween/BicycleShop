@@ -17,7 +17,7 @@ export class OptionSeeder {
         const optionsData = parts.map((part) => {
             if (part.name === 'Color') {
                 return [
-                    { name: 'White', description: 'Classic white color', price: 0, quantity: getRandom(), is_available: true, part },
+                    { name: 'White', description: 'Classic white color', price: 5, quantity: getRandom(), is_available: true, part },
                     { name: 'Black', description: 'Elegant black color', price: 10, quantity: getRandom(), is_available: false, part },
                     { name: 'Red', description: 'Sporty red color', price: 15, quantity: getRandom(), is_available: true, part },
                 ];

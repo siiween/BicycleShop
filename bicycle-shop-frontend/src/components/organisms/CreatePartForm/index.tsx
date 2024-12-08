@@ -1,12 +1,12 @@
 'use client';
 import { createPart } from '@/actions/partsActions';
 import Button from '@/components/atoms/Button';
-import Input from '@/components/molecules/Input';
+import Input from '@/components/atoms/Input';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function CreatePartForm() {
+const CreatePartForm: React.FC = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -79,4 +79,6 @@ export default function CreatePartForm() {
       </div>
     </form>
   );
-}
+};
+
+export default CreatePartForm;

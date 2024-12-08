@@ -1,7 +1,5 @@
 export function formatConflictMessage(conflictingOptions: string[]): string {
 
-    console.log('conflictingOptions:', conflictingOptions);
-
     if (conflictingOptions.length === 0) {
         return "";
     }

@@ -1,12 +1,16 @@
 'use client';
 import { createOption } from '@/actions/optionsActions';
 import Button from '@/components/atoms/Button';
-import Input from '@/components/molecules/Input';
+import Input from '@/components/atoms/Input';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function CreateOptionForm({ partId }: { partId: number }) {
+interface CreateOptionFormProps {
+  partId: number;
+}
+
+const CreateOptionForm: React.FC<CreateOptionFormProps> = ({ partId }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -110,4 +114,6 @@ export default function CreateOptionForm({ partId }: { partId: number }) {
       </div>
     </form>
   );
-}
+};
+
+export default CreateOptionForm;

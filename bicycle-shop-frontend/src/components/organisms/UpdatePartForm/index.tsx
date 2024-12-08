@@ -2,13 +2,17 @@
 import { deletePart, updatePart } from '@/actions/partsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
-import Input from '@/components/molecules/Input';
+import Input from '@/components/atoms/Input';
 import { Part } from '@/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function UpdatePartForm({ part }: { part: Part }) {
+interface UpdatePartFormProps {
+  part: Part;
+}
+
+const UpdatePartForm: React.FC<UpdatePartFormProps> = ({ part }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -119,4 +123,6 @@ export default function UpdatePartForm({ part }: { part: Part }) {
       </form>
     </>
   );
-}
+};
+
+export default UpdatePartForm;

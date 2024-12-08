@@ -1,7 +1,6 @@
 'use client';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface GlobalErrorProps {
@@ -10,7 +9,6 @@ interface GlobalErrorProps {
 }
 
 const GlobalError: React.FC<GlobalErrorProps> = ({ error, reset }) => {
-  const router = useRouter();
   return (
     <html>
       <body>

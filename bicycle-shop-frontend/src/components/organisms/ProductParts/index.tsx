@@ -9,15 +9,17 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function ProductParts({
-  parts,
-  availableParts,
-  productId,
-}: {
+interface ProductPartsProps {
   parts: Part[];
   availableParts: Part[];
   productId: number;
-}) {
+}
+
+const ProductParts: React.FC<ProductPartsProps> = ({
+  parts,
+  availableParts,
+  productId,
+}) => {
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
 
@@ -81,7 +83,7 @@ export default function ProductParts({
 
       {openModal && (
         <AssociatePartModal
-          onClose={() => setOpenModal(true)}
+          onClose={() => setOpenModal(false)}
           availableParts={availableParts}
           parts={parts}
           productId={productId}
@@ -89,4 +91,6 @@ export default function ProductParts({
       )}
     </>
   );
-}
+};
+
+export default ProductParts;

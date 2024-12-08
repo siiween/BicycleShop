@@ -13,13 +13,13 @@ interface ArtistCardProps {
   productId: number;
 }
 
-export default function ProductCard({
+const ProductCard: React.FC<ArtistCardProps> = ({
   imageUrl,
   name,
   href,
   description,
   productId,
-}: ArtistCardProps) {
+}) => {
   const { currentProduct } = useConfiguratorStore();
   return (
     <Link
@@ -75,4 +75,6 @@ export default function ProductCard({
       </div>
     </Link>
   );
-}
+};
+
+export default ProductCard;

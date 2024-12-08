@@ -1,18 +1,20 @@
 'use client';
 import { createProduct } from '@/actions/productsActions';
 import Button from '@/components/atoms/Button';
-import Input from '@/components/molecules/Input';
-import Select from '@/components/molecules/Select';
+import Input from '@/components/atoms/Input';
+import Select from '@/components/atoms/Select';
 import { Category } from '@/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function CreateProductForm({
-  categories,
-}: {
+interface CreateProductFormProps {
   categories: Category[];
-}) {
+}
+
+const CreateProductForm: React.FC<CreateProductFormProps> = ({
+  categories,
+}) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -104,4 +106,6 @@ export default function CreateProductForm({
       </div>
     </form>
   );
-}
+};
+
+export default CreateProductForm;

@@ -1,45 +1,42 @@
 "use server";
 
+import { API_URLS } from "@/lib/apiUrls";
 import axiosRequest from "@/lib/axiosInstace";
 import { CreateProduct } from "@/types/apiTypes";
 
 export async function fetchProductById(id: number) {
-    return axiosRequest(`/products/${id}`);
-}
-
-export async function fetchPartsByProductId(productId: number) {
-    return axiosRequest(`/products/${productId}/parts`);
+    return axiosRequest(API_URLS.products.fetchById(id));
 }
 
 export async function fetchProductsByCategory(categoryId: number) {
-    return axiosRequest(`/categories/${categoryId}/products`);
+    return axiosRequest(API_URLS.categories.fetchProducts(categoryId));
 }
 
 export async function fetchProducts() {
-    return axiosRequest(`/products`);
+    return axiosRequest(API_URLS.products.fetch());
 }
 
 export async function createProduct(product: CreateProduct) {
-    return axiosRequest(`/products`, product, "POST");
+    return axiosRequest(API_URLS.products.create(), product, "POST");
 }
 
 
 export async function updateProduct(product: CreateProduct, productId: number) {
-    return axiosRequest(`/products/` + productId, product, "PUT");
+    return axiosRequest(API_URLS.products.update(productId), product, "PUT");
 }
 
 
 export async function deleteProduct(productId: number) {
-    return axiosRequest(`/products/` + productId, {}, "DELETE");
+    return axiosRequest(API_URLS.products.delete(productId), {}, "DELETE");
 }
 
 
 export async function associatePartToProduct(productId: number, partId: number) {
-    return axiosRequest(`/products/${productId}/parts`, {
+    return axiosRequest(API_URLS.products.associatePart(productId), {
         partId: partId
     }, "POST");
 }
 
 export async function disassociatePartFromProduct(productId: number, partId: number) {
-    return axiosRequest(`/products/${productId}/parts/${partId}`, {}, "DELETE");
+    return axiosRequest(API_URLS.products.disassociatePart(productId, partId), {}, "DELETE");
 }

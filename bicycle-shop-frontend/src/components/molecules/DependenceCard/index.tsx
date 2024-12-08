@@ -6,19 +6,20 @@ import { DependentPrice } from '@/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-export default function DependenceCard({
-  dependence,
-  partId,
-  optionId,
-}: {
+interface DependenceCardProps {
   dependence: DependentPrice;
   partId: number;
   optionId: number;
-}) {
+}
+
+const DependenceCard: React.FC<DependenceCardProps> = ({
+  dependence,
+  partId,
+  optionId,
+}) => {
   const router = useRouter();
 
   const handleDelete = async () => {
-    console.log(dependence.id);
     try {
       const { success } = await deleteDependentPrice(dependence.id);
       if (success) {
@@ -53,4 +54,6 @@ export default function DependenceCard({
       </div>
     </div>
   );
-}
+};
+
+export default DependenceCard;

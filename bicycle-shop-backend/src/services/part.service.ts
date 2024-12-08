@@ -1,7 +1,6 @@
 import { AppDataSource } from '@config/data-source';
 import { Part } from '@database/entities/part.entity';
 import { Option } from '@entities/option.entity';
-import { ProductPart } from '@entities/product-part.entity';
 import { HttpError } from '@errors/http-error.class';
 import { cleanUpForbiddenCombinations } from '@utils/forbidden-combination.utils';
 

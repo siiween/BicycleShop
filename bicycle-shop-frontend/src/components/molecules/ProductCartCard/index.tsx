@@ -7,17 +7,19 @@ import { Product } from '@/types/apiTypes';
 import Button from '@/components/atoms/Button';
 import { TrashIcon } from '@heroicons/react/24/outline';
 
-export default function ProductCartCard({
-  product,
-  removeProduct,
-}: {
+interface ProductCartCardProps {
   product: {
     product: Product;
     options: { id: number; name: string; price: number }[];
     configurationId: number;
   };
   removeProduct: (configurationId: number) => void;
-}) {
+}
+
+const ProductCartCard: React.FC<ProductCartCardProps> = ({
+  product,
+  removeProduct,
+}) => {
   const [total, setTotal] = useState<number | null>(null);
   const [realPrices, setRealPrices] = useState<
     | {
@@ -40,13 +42,10 @@ export default function ProductCartCard({
         const { data: finalPrices } = await calculateOptionsPrice(optionsIds);
         setTotal(finalPrices.total);
         setRealPrices(finalPrices.options);
-
-        console.log('Prices:', finalPrices);
       } catch (error) {
         console.error('Error fetching product prices:', error);
       }
     }
-
     fetchPrice();
   }, [optionsIds]);
 
@@ -112,4 +111,6 @@ export default function ProductCartCard({
       </div>
     </div>
   );
-}
+};
+
+export default ProductCartCard;

@@ -4,11 +4,12 @@ import ForbiddenCombinationCard from '@/components/molecules/ForbiddenCombinatio
 import { ForbiddenCombination } from '@/types/apiTypes';
 import Link from 'next/link';
 
-export default function ForbiddenCombinations({
-  forbiddenCombinations,
-}: {
+interface ForbiddenCombinationsProps {
   forbiddenCombinations: ForbiddenCombination[];
-}) {
+}
+const ForbiddenCombinations: React.FC<ForbiddenCombinationsProps> = ({
+  forbiddenCombinations,
+}) => {
   return (
     <>
       <div className="flex flex-row justify-between mb-5">
@@ -36,4 +37,6 @@ export default function ForbiddenCombinations({
       </div>
     </>
   );
-}
+};
+
+export default ForbiddenCombinations;

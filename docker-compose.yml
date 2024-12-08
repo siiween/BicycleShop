@@ -1,31 +1,40 @@
-version: "3.9"
-
 services:
-  bicycle-shop-backend:
+  postgres:
+    image: postgres:15
+    container_name: postgres_bicycle_shop
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: bicycle_shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
     build:
-      context: ./bicycle-shop-backend
-    command: npm run dev
+      context: .
+      dockerfile: ./bicycle-shop-backend/Dockerfile
+    container_name: bicycle_shop_backend
+    restart: always
+    env_file:
+      - ./bicycle-shop-backend/.env
     ports:
       - "3030:3030"
-    volumes:
-      - ./bicycle-shop-backend:/app
-      - ./bicycle-shop-backend/database.sqlite:/app/database.sqlite
-    environment:
-      NODE_ENV: development
-      PORT: 3030
+    depends_on:
+      - postgres
 
-  bicycle-shop-frontend:
+  frontend:
     build:
       context: ./bicycle-shop-frontend
-    command: npm run dev
+      dockerfile: Dockerfile
+    container_name: bicycle_shop_frontend
+    restart: always
     ports:
       - "3000:3000"
-    volumes:
-      - ./bicycle-shop-frontend:/app
-    environment:
-      NODE_ENV: development
+    depends_on:
+      - backend
 
-  sqlite:
-    image: nouchka/sqlite3
-    volumes:
-      - ./bicycle-shop-backend/database.sqlite:/data/database.sqlite
+volumes:
+  postgres_data:

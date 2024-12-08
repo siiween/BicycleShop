@@ -6,7 +6,11 @@ import ProductCartCard from '@/components/molecules/ProductCartCard';
 import { useShoppingCart } from '@/hooks/useShoppingCart';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
-export default function Cart({ onClose }: { onClose: () => void }) {
+interface CartProps {
+  onClose: () => void;
+}
+
+const Cart: React.FC<CartProps> = ({ onClose }) => {
   const { cart, clearCart, removeProduct } = useShoppingCart();
 
   return (
@@ -22,7 +26,7 @@ export default function Cart({ onClose }: { onClose: () => void }) {
         </div>
         <div className="grow overflow-y-scroll flex flex-col gap-0 divide-y-4">
           {cart.products.length === 0 ? (
-            <Text>Your cart is empty</Text>
+            <Text className="p-5">Your cart is empty</Text>
           ) : (
             cart.products.map((product) => (
               <ProductCartCard
@@ -42,4 +46,6 @@ export default function Cart({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   );
-}
+};
+
+export default Cart;

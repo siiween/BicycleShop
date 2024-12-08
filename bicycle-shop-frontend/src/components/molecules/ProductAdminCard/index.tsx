@@ -2,17 +2,19 @@ import Text from '@/components/atoms/Text';
 import Link from 'next/link';
 import { ArrowRightIcon } from '@heroicons/react/16/solid';
 
-export default function ProductAdminCard({
-  name,
-  href,
-  description,
-  category,
-}: {
+interface ProductAdminCardProps {
   name: string;
   href: string;
   description: string;
   category: string;
-}) {
+}
+
+const ProductAdminCard: React.FC<ProductAdminCardProps> = ({
+  name,
+  href,
+  description,
+  category,
+}) => {
   return (
     <Link
       href={href}
@@ -47,4 +49,6 @@ export default function ProductAdminCard({
       </div>
     </Link>
   );
-}
+};
+
+export default ProductAdminCard;

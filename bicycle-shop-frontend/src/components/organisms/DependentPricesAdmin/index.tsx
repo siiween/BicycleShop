@@ -7,15 +7,17 @@ import DependenceCard from '@/components/molecules/DependenceCard';
 import { DependentPrice, Option, Part } from '@/types/apiTypes';
 import { useState } from 'react';
 
-export default function DependentPricesAdmin({
-  option,
-  dependentPrices,
-  parts,
-}: {
+interface DependentPricesAdminProps {
   option: Option;
   dependentPrices: DependentPrice[];
   parts: Part[];
-}) {
+}
+
+const DependentPricesAdmin: React.FC<DependentPricesAdminProps> = ({
+  option,
+  dependentPrices,
+  parts,
+}) => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
@@ -52,4 +54,6 @@ export default function DependentPricesAdmin({
       )}
     </>
   );
-}
+};
+
+export default DependentPricesAdmin;

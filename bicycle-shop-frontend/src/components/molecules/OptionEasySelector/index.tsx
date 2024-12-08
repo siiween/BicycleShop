@@ -5,19 +5,20 @@ import Text from '@/components/atoms/Text';
 import { Option, Part } from '@/types/apiTypes';
 import { useEffect, useState } from 'react';
 
-export default function OptionEasySelector({
-  parts,
-  handleSubmit,
-  currentSelectedOption,
-  setCurrentSelectedOption,
-  selection = [],
-}: {
+interface OptionEasySelectorProps {
   parts: Part[];
   handleSubmit: () => void;
   currentSelectedOption: Option | null;
   setCurrentSelectedOption: (option: Option | null) => void;
   selection?: Option[];
-}) {
+}
+const OptionEasySelector: React.FC<OptionEasySelectorProps> = ({
+  parts,
+  handleSubmit,
+  currentSelectedOption,
+  setCurrentSelectedOption,
+  selection = [],
+}) => {
   const [currentSelectedPart, setCurrentSelectedPart] = useState<number | null>(
     null
   );
@@ -100,4 +101,6 @@ export default function OptionEasySelector({
       )}
     </>
   );
-}
+};
+
+export default OptionEasySelector;

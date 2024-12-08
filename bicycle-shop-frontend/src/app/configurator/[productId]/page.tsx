@@ -1,18 +1,16 @@
-import {
-  fetchPartsByProductId,
-  fetchProductById,
-} from '@/actions/productsActions';
+import { fetchPartsByProductId } from '@/actions/partsActions';
+import { fetchProductById } from '@/actions/productsActions';
 import Text from '@/components/atoms/Text';
 import Configurator from '@/components/organisms/Configurator';
 
 export default async function ConfiguratorPage({
   params,
 }: {
-  params: { id: number };
+  params: { productId: number };
 }) {
-  const { id } = await params;
-  const { data: product } = await fetchProductById(id);
-  const { data: parts } = await fetchPartsByProductId(id);
+  const { productId } = await params;
+  const { data: product } = await fetchProductById(productId);
+  const { data: parts } = await fetchPartsByProductId(productId);
 
   return (
     <main className="flex flex-col gap-5 min-h-screen">

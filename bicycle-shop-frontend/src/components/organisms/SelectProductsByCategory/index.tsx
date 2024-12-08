@@ -1,18 +1,18 @@
-// components/organisms/SelectProductsByCategory.tsx
 import Text from '@/components/atoms/Text';
 import ProductCard from '@/components/molecules/ProductCard';
 import { Category, Product } from '@/types/apiTypes';
 
-export default function SelectProductsByCategory({
-  category,
-  products,
-}: {
+interface SelectProductsByCategoryProps {
   category: Category;
   products: Product[];
-}) {
+}
+
+const SelectProductsByCategory: React.FC<SelectProductsByCategoryProps> = ({
+  category,
+  products,
+}) => {
   return (
     <>
-      {' '}
       <div className="border-b border-neutral-300 pb-5">
         <Text as="h1" size="3xl" variant="primary" className="font-bold">
           Select a {category.name} to configure it
@@ -37,4 +37,6 @@ export default function SelectProductsByCategory({
       </div>
     </>
   );
-}
+};
+
+export default SelectProductsByCategory;

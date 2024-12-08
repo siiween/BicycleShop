@@ -4,7 +4,11 @@ import ProductAdminCard from '@/components/molecules/ProductAdminCard';
 import { Product } from '@/types/apiTypes';
 import Link from 'next/link';
 
-export default function AdminProducts({ products }: { products: Product[] }) {
+interface AdminProductsProps {
+  products: Product[];
+}
+
+const AdminProducts: React.FC<AdminProductsProps> = ({ products }) => {
   return (
     <>
       <div className="flex flex-row justify-between mb-5">
@@ -28,4 +32,6 @@ export default function AdminProducts({ products }: { products: Product[] }) {
       </div>
     </>
   );
-}
+};
+
+export default AdminProducts;

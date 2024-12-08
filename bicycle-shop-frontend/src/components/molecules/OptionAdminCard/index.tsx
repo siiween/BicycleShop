@@ -7,13 +7,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-export default function OptionAdminCard({
-  option,
-  partId,
-}: {
+interface OptionAdminCardProps {
   option: Option;
   partId: number;
-}) {
+}
+
+const OptionAdminCard: React.FC<OptionAdminCardProps> = ({
+  option,
+  partId,
+}) => {
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -64,4 +66,6 @@ export default function OptionAdminCard({
       </div>
     </div>
   );
-}
+};
+
+export default OptionAdminCard;

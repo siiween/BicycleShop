@@ -1,17 +1,18 @@
-import Image from 'next/image';
 import Text from '@/components/atoms/Text';
 import Link from 'next/link';
 import { ArrowRightIcon } from '@heroicons/react/16/solid';
 
-export default function PartAdminCard({
-  name,
-  href,
-  description,
-}: {
+interface PartAdminCardProps {
   name: string;
   href: string;
   description: string;
-}) {
+}
+
+const PartAdminCard: React.FC<PartAdminCardProps> = ({
+  name,
+  href,
+  description,
+}) => {
   return (
     <Link
       href={href}
@@ -36,4 +37,6 @@ export default function PartAdminCard({
       </div>
     </Link>
   );
-}
+};
+
+export default PartAdminCard;

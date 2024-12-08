@@ -4,13 +4,15 @@ import Text from '@/components/atoms/Text';
 import { OptionsPrice, Part } from '@/types/apiTypes';
 import { useEffect, useState } from 'react';
 
-export default function PriceBanner({
-  selectedOptions,
-  parts,
-}: {
+interface PriceBannerProps {
   selectedOptions: Record<number, { id: number; name: string }>;
   parts: Part[];
-}) {
+}
+
+const PriceBanner: React.FC<PriceBannerProps> = ({
+  selectedOptions,
+  parts,
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [price, setPrice] = useState<OptionsPrice | null>(null);
@@ -97,4 +99,6 @@ export default function PriceBanner({
       </div>
     </div>
   );
-}
+};
+
+export default PriceBanner;

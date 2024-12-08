@@ -8,17 +8,19 @@ import { useMemo } from 'react';
 import { associatePartToProduct } from '@/actions/productsActions';
 import { useRouter } from 'next/navigation';
 
-export default function AssociatePartModal({
-  onClose,
-  availableParts,
-  parts,
-  productId,
-}: {
+interface AssociatePartModalProps {
   onClose: () => void;
   availableParts: Part[];
   parts: Part[];
   productId: number;
-}) {
+}
+
+const AssociatePartModal: React.FC<AssociatePartModalProps> = ({
+  onClose,
+  availableParts,
+  parts,
+  productId,
+}) => {
   const router = useRouter();
 
   const filteredAvailableParts = useMemo(() => {
@@ -45,7 +47,6 @@ export default function AssociatePartModal({
 
   return (
     <Modal onClose={onClose} title="Select a part">
-      hola
       <div>
         <div className="grid grid-cols-3 gap-5">
           {filteredAvailableParts.map((part: Part) => (
@@ -73,4 +74,6 @@ export default function AssociatePartModal({
       </div>
     </Modal>
   );
-}
+};
+
+export default AssociatePartModal;

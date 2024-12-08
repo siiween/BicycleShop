@@ -1,15 +1,19 @@
 'use client';
 import Button from '@/components/atoms/Button';
-import Input from '@/components/molecules/Input';
+import Input from '@/components/atoms/Input';
 import Text from '@/components/atoms/Text';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { updateOption } from '@/actions/optionsActions';
-import Checkbox from '@/components/molecules/Checkbox';
+import Checkbox from '@/components/atoms/Checkbox';
 import { Option } from '@/types/apiTypes';
 
-export default function UpdateOptionForm({ option }: { option: Option }) {
+interface UpdateOptionFormProps {
+  option: Option;
+}
+
+const UpdateOptionForm: React.FC<UpdateOptionFormProps> = ({ option }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -155,4 +159,6 @@ export default function UpdateOptionForm({ option }: { option: Option }) {
       </form>
     </>
   );
-}
+};
+
+export default UpdateOptionForm;

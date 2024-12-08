@@ -1,5 +1,5 @@
 import { Option, Part } from '@/types/apiTypes';
-import Input from '../Input';
+import Input from '../../atoms/Input';
 import Modal from '../Modal';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
@@ -7,15 +7,17 @@ import { useState } from 'react';
 import { createDependentPrice } from '@/actions/dependentPrices';
 import OptionEasySelector from '../OptionEasySelector';
 
-export default function AddDependenceModal({
-  option,
-  onClose,
-  parts,
-}: {
+interface AddDependenceModalProps {
   option: Option;
   onClose: () => void;
   parts: Part[];
-}) {
+}
+
+const AddDependenceModal: React.FC<AddDependenceModalProps> = ({
+  option,
+  onClose,
+  parts,
+}) => {
   const router = useRouter();
 
   const [newPrice, setNewPrice] = useState<number>(0);
@@ -75,4 +77,6 @@ export default function AddDependenceModal({
       />
     </Modal>
   );
-}
+};
+
+export default AddDependenceModal;
