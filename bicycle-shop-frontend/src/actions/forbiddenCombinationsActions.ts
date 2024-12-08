@@ -23,3 +23,9 @@ export async function deleteForbiddenCombination(id: number) {
 export async function createForbiddenCombination(forbiddenCombination: CreateForbiddenCombination) {
     return axiosRequest(`/forbidden-combinations`, forbiddenCombination, "POST");
 }
+
+export async function validateProuctConfiguration(selectedOptions: Record<number, { id: number; name: string }>, productId: number) {
+    return axiosRequest(`/forbidden-combinations/validate-product-configuration/${productId}`, {
+        selectedOptionIds: Object.values(selectedOptions).map((option) => option.id),
+    }, "POST");
+}

@@ -1,4 +1,4 @@
-import { Part } from "@/types/apiTypes";
+import { Option, Part } from "@/types/apiTypes";
 import { create } from "zustand";
 
 
@@ -6,28 +6,42 @@ import { create } from "zustand";
 interface ConfiguratorState {
     currentStep: number;
     parts: Part[];
-    selectedOptions: Record<number, { id: number; name: string }>;
-
+    selectedOptions: Record<number, Option>;
+    currentProduct: number;
     setParts: (parts: Part[]) => void;
-    selectOption: (partId: number, optionId: number, optionName: string) => void;
+    selectOption: (partId: number, option: Option) => void;
     nextStep: () => void;
     previousStep: () => void;
     validateOption: (optionId: number, validateFn: () => Promise<string | null>) => void;
+    reset: () => void;
+    setCurrentProduct: (productId: number) => void;
 }
 
 export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     currentStep: 0,
     parts: [],
     selectedOptions: {},
+    currentProduct: 0,
+
+    setCurrentProduct: (productId: number) => set({ currentProduct: productId }),
+
+    reset: () =>
+        set({
+            currentStep: 0,
+            parts: [],
+            selectedOptions: {},
+            currentProduct: 0,
+        }),
+
 
     setParts: (parts) => set({ parts }),
 
-    selectOption: (partId, optionId, optionName) => {
+    selectOption: (partId, option) => {
         const { selectedOptions } = get();
         set({
             selectedOptions: {
                 ...selectedOptions,
-                [partId]: { id: optionId, name: optionName },
+                [partId]: option,
             },
         });
     },

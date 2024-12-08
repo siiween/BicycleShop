@@ -1,13 +1,16 @@
+'use client';
 import Image from 'next/image';
 import Text from '@/components/atoms/Text';
 import Link from 'next/link';
 import { ArrowRightIcon } from '@heroicons/react/16/solid';
+import { useConfiguratorStore } from '@/store/configuratorStore';
 
 interface ArtistCardProps {
   imageUrl: string;
   name: string;
   href: string;
   description: string;
+  productId: number;
 }
 
 export default function ProductCard({
@@ -15,7 +18,9 @@ export default function ProductCard({
   name,
   href,
   description,
+  productId,
 }: ArtistCardProps) {
+  const { currentProduct } = useConfiguratorStore();
   return (
     <Link
       href={href}
@@ -44,12 +49,29 @@ export default function ProductCard({
           {description || 'No description'}
         </Text>
 
-        <div className="flex flex-row gap-3 items-center mt-5">
-          <Text size="sm" variant="primary" className="font-semibold text-left">
-            Start Configuration
-          </Text>
-          <ArrowRightIcon className="h-4 w-4 text-rose-700" />
-        </div>
+        {currentProduct == productId ? (
+          <div className="flex flex-row gap-3 items-center mt-5 bg-neutral-300 w-fit px-3 py-2 rounded-lg">
+            <Text
+              size="sm"
+              variant="primary"
+              className="font-semibold text-left"
+            >
+              Continue with the configuration
+            </Text>
+            <ArrowRightIcon className="h-4 w-4 text-rose-700" />
+          </div>
+        ) : (
+          <div className="flex flex-row gap-3 items-center mt-5">
+            <Text
+              size="sm"
+              variant="primary"
+              className="font-semibold text-left"
+            >
+              Start Configuration
+            </Text>
+            <ArrowRightIcon className="h-4 w-4 text-rose-700" />
+          </div>
+        )}
       </div>
     </Link>
   );

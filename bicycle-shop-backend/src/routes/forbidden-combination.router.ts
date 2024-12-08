@@ -78,11 +78,13 @@ router.post(
     ForbiddenCombinationController.validateSelection
 );
 
+
 router.post(
-    '/valid-options',
-    validOptions,
+    '/validate-product-configuration/:id',
+    [...idValidation, ...validOptions],
     validate,
-    ForbiddenCombinationController.getValidOptions
+    ForbiddenCombinationController.validateProductConfiguration
 );
+
 
 export default router;

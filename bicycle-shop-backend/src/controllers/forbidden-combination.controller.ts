@@ -92,16 +92,23 @@ export class ForbiddenCombinationController {
         }
     };
 
-    static getValidOptions = async (req: Request, res: Response, next: NextFunction) => {
+
+    static validateProductConfiguration = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
         const { selectedOptionIds } = req.body;
 
         try {
-            const validOptions = await ForbiddenCombinationService.getValidOptions(selectedOptionIds);
+            const validationResult = await ForbiddenCombinationService.validateProductConfiguration(
+                parseInt(id, 10),
+                selectedOptionIds
+            );
 
             const response: ApiResponse = {
-                success: true,
-                data: validOptions,
-                message: 'Valid options retrieved successfully',
+                success: validationResult.isValid,
+                data: validationResult,
+                message: validationResult.isValid
+                    ? 'Product configuration is valid'
+                    : 'Product configuration is invalid',
             };
 
             res.json(response);
@@ -109,4 +116,5 @@ export class ForbiddenCombinationController {
             next(error);
         }
     };
+
 }

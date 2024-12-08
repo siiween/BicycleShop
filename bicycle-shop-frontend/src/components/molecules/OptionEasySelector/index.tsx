@@ -4,7 +4,6 @@ import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import { Option, Part } from '@/types/apiTypes';
 import { useEffect, useState } from 'react';
-import { set } from 'react-hook-form';
 
 export default function OptionEasySelector({
   parts,

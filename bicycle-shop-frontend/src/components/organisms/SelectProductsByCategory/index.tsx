@@ -1,27 +1,31 @@
-import { fetchProductsByCategory } from '@/actions/productsActions';
+// components/organisms/SelectProductsByCategory.tsx
 import Text from '@/components/atoms/Text';
 import ProductCard from '@/components/molecules/ProductCard';
-import { Product } from '@/types/apiTypes';
+import { Category, Product } from '@/types/apiTypes';
 
-export default async function ProductsPage({
-  params,
+export default function SelectProductsByCategory({
+  category,
+  products,
 }: {
-  params: { id: string };
+  category: Category;
+  products: Product[];
 }) {
-  const { id } = await params;
-  const { data: products } = await fetchProductsByCategory(parseInt(id));
-
   return (
-    <main className="flex flex-col gap-5 ">
+    <>
+      {' '}
       <div className="border-b border-neutral-300 pb-5">
         <Text as="h1" size="3xl" variant="primary" className="font-bold">
-          Select a product to configure it
+          Select a {category.name} to configure it
+        </Text>
+        <Text size="lg" variant="muted" className="mt-2">
+          {category.description}
         </Text>
       </div>
       <div className="grid grid-cols-2 gap-5">
         {products.map((product: Product) => (
           <ProductCard
             key={product.id}
+            productId={product.id}
             name={product.name}
             description={product.description}
             imageUrl={
@@ -31,6 +35,6 @@ export default async function ProductsPage({
           />
         ))}
       </div>
-    </main>
+    </>
   );
 }

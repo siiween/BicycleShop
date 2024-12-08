@@ -19,7 +19,7 @@ export default function AddDependenceModal({
   const router = useRouter();
 
   const [newPrice, setNewPrice] = useState<number>(0);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [selectedOption, setSelectedOption] = useState<Option | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPrice(Number(e.target.value));
@@ -33,7 +33,7 @@ export default function AddDependenceModal({
     const formattedData = {
       price: newPrice,
       optionId: option.id as number,
-      conditionOptionId: selectedOption as number,
+      conditionOptionId: selectedOption.id,
     };
 
     try {

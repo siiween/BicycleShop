@@ -1,9 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useConfiguratorStore } from '@/store/configuratorStore';
-import Button from '@/components/atoms/Button';
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/16/solid';
-import { Option, Part } from '@/types/apiTypes';
+import { Option, Part, Product } from '@/types/apiTypes';
 import PriceBanner from '@/components/molecules/PriceBanner.tsx';
 import Image from 'next/image';
 import Text from '@/components/atoms/Text';
@@ -11,11 +9,14 @@ import { formatConflictMessage } from '@/utils/format';
 import { toast } from 'react-toastify';
 import { fetchOptionsByPartId } from '@/actions/optionsActions';
 import { validateOptionsCombinations } from '@/actions/forbiddenCombinationsActions';
+import ConfiguratorNavigation from '@/components/molecules/ConfiguratorNavigation';
 
 export default function Configurator({
   initialParts,
+  product,
 }: {
   initialParts: Part[];
+  product: Product;
 }) {
   const {
     currentStep,
@@ -25,6 +26,9 @@ export default function Configurator({
     selectOption,
     nextStep,
     previousStep,
+    currentProduct,
+    reset,
+    setCurrentProduct,
   } = useConfiguratorStore();
 
   const [options, setOptions] = useState<Option[]>([]);
@@ -32,6 +36,10 @@ export default function Configurator({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (currentProduct !== product.id) {
+      reset();
+      setCurrentProduct(product.id);
+    }
     setParts(initialParts);
   }, [initialParts]);
 
@@ -64,7 +72,7 @@ export default function Configurator({
       );
 
       if (data?.isValid) {
-        selectOption(currentPart.id, option.id, option.name);
+        selectOption(currentPart.id, option);
       } else {
         const conflictingOptionsNames = data?.conflictingOptions
           .map(
@@ -161,32 +169,15 @@ export default function Configurator({
             )}
           </div>
         </div>
-        <div className="flex justify-between w-full mt-6">
-          <Button
-            onClick={previousStep}
-            variant="outline"
-            disabled={currentStep === 0}
-          >
-            <ArrowLeftIcon className="h-4 w-4 text-black" /> Previous
-          </Button>
-          {currentStep === parts.length - 1 ? (
-            <Button
-              onClick={nextStep}
-              disabled={!selectedOptions[currentPart.id]?.id}
-            >
-              Add to the cart
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              onClick={nextStep}
-              disabled={!selectedOptions[currentPart.id]?.id}
-            >
-              Next
-              <ArrowRightIcon className="h-4 w-4 text-black" />
-            </Button>
-          )}
-        </div>
+        <ConfiguratorNavigation
+          previousStep={previousStep}
+          nextStep={nextStep}
+          currentStep={currentStep}
+          parts={parts}
+          selectedOptions={selectedOptions}
+          currentPart={currentPart}
+          product={product}
+        />
       </div>
       <PriceBanner selectedOptions={selectedOptions} parts={parts} />
     </div>

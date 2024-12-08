@@ -21,7 +21,7 @@ export default async function ConfiguratorPage({
           Configurating {product.name}
         </Text>
       </div>
-      <Configurator initialParts={parts} />
+      <Configurator initialParts={parts} product={product} />
     </main>
   );
 }

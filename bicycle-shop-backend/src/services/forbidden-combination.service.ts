@@ -3,7 +3,8 @@ import { ForbiddenCombination } from '@database/entities/forbidden-combination.e
 import { ForbiddenCombinationOption } from '@database/entities/forbidden-combination-option.entity';
 import { Option } from '@database/entities/option.entity';
 import { HttpError } from '@errors/http-error.class';
-import { In } from 'typeorm';
+import { Product } from '@entities/product.entity';
+import { getValidForbiddenCombinations, validateForbiddenCombinations, validatePartsConfiguration, validateStockAndAvailability } from '@utils/forbidden-combination.utils';
 
 export class ForbiddenCombinationService {
 
@@ -83,73 +84,65 @@ export class ForbiddenCombinationService {
 
         await AppDataSource.getRepository(ForbiddenCombination).remove(forbiddenCombination);
     }
-
-
     static async validateSelection(
         selectedOptionIds: number[],
         newOptionId: number
     ): Promise<{ isValid: boolean; conflictingOptions: number[] }> {
-        const forbiddenCombinations = await AppDataSource.getRepository(ForbiddenCombination).find({
-            relations: ['forbiddenCombinationOptions', 'forbiddenCombinationOptions.option'],
-        });
-
-        const validCombinations = forbiddenCombinations.filter(
-            (fc) => fc.forbiddenCombinationOptions.length > 1
-        );
-
-        const options = await AppDataSource.getRepository(Option).find({
-            where: { id: In([...selectedOptionIds, newOptionId]) },
-        });
-
-        const outOfStockOptions = options
-            .filter((option) => option.quantity <= 0 || option.is_available === false)
-            .map((option) => option.id);
+        const validCombinations = await getValidForbiddenCombinations();
+        const outOfStockOptions = await validateStockAndAvailability([...selectedOptionIds, newOptionId]);
 
         if (outOfStockOptions.length > 0) {
-            return {
-                isValid: false,
-                conflictingOptions: outOfStockOptions,
-            };
+            return { isValid: false, conflictingOptions: outOfStockOptions };
         }
 
-        const updatedSelection = new Set([...selectedOptionIds, newOptionId]);
+        const selectedOptionSet = new Set([...selectedOptionIds, newOptionId]);
+        const conflictingOptions = validateForbiddenCombinations(validCombinations, selectedOptionSet);
 
-        const conflictingCombination = validCombinations.find((fc) => {
-            const forbiddenOptionIds = fc.forbiddenCombinationOptions.map((fco) => fco.option.id);
-            return forbiddenOptionIds.every((id) => updatedSelection.has(id));
-        });
-
-        if (conflictingCombination) {
-            const conflictingOptions = conflictingCombination.forbiddenCombinationOptions.map(
-                (fco) => fco.option.id
-            );
-            return {
-                isValid: false,
-                conflictingOptions,
-            };
+        if (conflictingOptions.length > 0) {
+            return { isValid: false, conflictingOptions };
         }
 
-        return {
-            isValid: true,
-            conflictingOptions: [],
-        };
+        return { isValid: true, conflictingOptions: [] };
     }
 
 
-    static async getValidOptions(selectedOptionIds: number[]): Promise<Option[]> {
-        const allOptions = await AppDataSource.getRepository(Option).find({
-            relations: ['part'],
+    static async validateProductConfiguration(
+        productId: number,
+        selectedOptionIds: number[]
+    ): Promise<{
+        isValid: boolean;
+        missingParts: number[];
+        invalidOptions: number[];
+        conflictingOptions: number[];
+    }> {
+        const product = await AppDataSource.getRepository(Product).findOne({
+            where: { id: productId },
+            relations: ['productParts', 'productParts.part', 'productParts.part.options'],
         });
 
-        const forbiddenCombinations = await AppDataSource.getRepository(ForbiddenCombination).find({
-            relations: ['forbiddenCombinationOptions', 'forbiddenCombinationOptions.option'],
-        });
+        if (!product) {
+            throw new HttpError(404, 'Product not found');
+        }
 
-        return allOptions.filter((option) => {
-            return !forbiddenCombinations.some((fc) => {
-                const forbiddenOptionIds = fc.forbiddenCombinationOptions.map((fco) => fco.option.id);
-                return selectedOptionIds.includes(option.id) && forbiddenOptionIds.includes(option.id);
-            });
-        });
+        const { missingParts, invalidOptions } = validatePartsConfiguration(product, new Set(selectedOptionIds));
+
+        if (missingParts.length > 0 || invalidOptions.length > 0) {
+            return { isValid: false, missingParts, invalidOptions, conflictingOptions: [] };
+        }
+
+        const outOfStockOptions = await validateStockAndAvailability(selectedOptionIds);
+        if (outOfStockOptions.length > 0) {
+            return { isValid: false, missingParts: [], invalidOptions: [], conflictingOptions: outOfStockOptions };
+        }
+
+        const validCombinations = await getValidForbiddenCombinations();
+        const conflictingOptions = validateForbiddenCombinations(validCombinations, new Set(selectedOptionIds));
+
+        if (conflictingOptions.length > 0) {
+            return { isValid: false, missingParts: [], invalidOptions: [], conflictingOptions };
+        }
+
+        return { isValid: true, missingParts: [], invalidOptions: [], conflictingOptions: [] };
     }
+
 }
