@@ -1,31 +1,48 @@
-import { Part } from '@entities/part.entity';
 import { DataSource } from 'typeorm';
+
+import { Part } from '@entities/part.entity';
+
 
 export class PartSeeder {
     public static async seed(dataSource: DataSource): Promise<void> {
         const partRepository = dataSource.getRepository(Part);
 
-        const liteParts = [
-            { name: 'Lite Handlebar', description: 'Handlebar designed for Lite Bicycle' },
-            { name: 'Lite Wheels', description: 'Wheels designed for Lite Bicycle' },
-            { name: 'Lite Frame', description: 'Frame designed for Lite Bicycle' },
+        const commonParts = [
+            { name: 'Seat', description: 'Universal seat for comfort' },
+            { name: 'Color', description: 'Customization for color options' },
         ];
 
-        const proParts = [
-            { name: 'Pro Handlebar', description: 'Handlebar designed for Pro Bicycle' },
-            { name: 'Pro Wheels', description: 'Wheels designed for Pro Bicycle' },
-            { name: 'Pro Frame', description: 'Frame designed for Pro Bicycle' },
+        const skateParts = [
+            { name: 'Skate Wheels', description: 'High-quality wheels for Skates' },
+            { name: 'Bearings', description: 'Smooth bearings for performance' },
+            { name: 'Boot', description: 'Durable boot for Skates' },
         ];
 
-        const sharedParts = [
-            { name: 'Seat', description: 'Comfortable seat for all bicycles' },
-            { name: 'Color', description: 'Bicycle color' },
+        const bicycleParts = [
+            { name: 'Handlebar', description: 'Ergonomic handlebar for Bicycles' },
+            { name: 'Bike Wheels', description: 'Durable wheels for Bicycles' },
+            { name: 'Frame', description: 'Lightweight frame for Bicycles' },
         ];
 
-        const allParts = [...liteParts, ...proParts, ...sharedParts];
-        const savedParts = allParts.map((part) => partRepository.create(part));
-        await partRepository.save(savedParts);
+        const specificParts = [
+            { name: 'Pro Suspension', description: 'Advanced suspension for Pro Bicycle' },
+            { name: 'Urban Grip', description: 'Enhanced grip for Urban Skate' },
+        ];
 
-        console.log('Seeded Parts: Lite, Pro, and Shared Parts');
+        const commonPartEntities = commonParts.map(part => partRepository.create(part));
+
+        const skatePartEntities = skateParts.map(part => partRepository.create({ ...part }));
+        const bicyclePartEntities = bicycleParts.map(part => partRepository.create({ ...part }));
+
+        const specificPartEntities = specificParts.map(part => partRepository.create(part));
+
+        await partRepository.save([
+            ...commonPartEntities,
+            ...skatePartEntities,
+            ...bicyclePartEntities,
+            ...specificPartEntities,
+        ]);
+
+        console.log('Seeded Parts: Common, Skates, Bicycles, and Model-Specific');
     }
 }

@@ -1,7 +1,8 @@
+import { DataSource } from 'typeorm';
+
 import { ForbiddenCombination } from '@entities/forbidden-combination.entity';
 import { ForbiddenCombinationOption } from '@entities/forbidden-combination-option.entity';
 import { Option } from '@entities/option.entity';
-import { DataSource } from 'typeorm';
 
 export class ForbiddenCombinationSeeder {
     public static async seed(dataSource: DataSource): Promise<void> {
@@ -9,43 +10,77 @@ export class ForbiddenCombinationSeeder {
         const forbiddenCombinationOptionRepository = dataSource.getRepository(ForbiddenCombinationOption);
         const optionRepository = dataSource.getRepository(Option);
 
-        const liteHandlebarPremium = await optionRepository.findOneBy({ name: 'Lite Handlebar Premium' });
-        const liteWheelsPremium = await optionRepository.findOneBy({ name: 'Lite Wheels Premium' });
-        const blackColor = await optionRepository.findOneBy({ name: 'Black' });
-        const seatPremium = await optionRepository.findOneBy({ name: 'Seat Premium' });
-        const whiteColor = await optionRepository.findOneBy({ name: 'White' });
+        const options = await optionRepository.find({ relations: ['part'] });
+        if (!options.length) {
+            throw new Error('No options found. Ensure OptionSeeder has run.');
+        }
 
-        if (!liteHandlebarPremium || !liteWheelsPremium || !blackColor || !seatPremium || !whiteColor) {
+        const findOption = (name: string): Option | undefined => options.find(option => option.name === name);
+
+        const handlebarPremium = findOption('Handlebar Premium');
+        const frameStandard = findOption('Frame Standard');
+        const redColor = findOption('Red');
+        const wheelsPremium = findOption('Skate Wheels Premium');
+        const bootStandard = findOption('Boot Standard');
+        const blackColor = findOption('Black');
+        const seatPremium = findOption('Seat Premium');
+        const whiteColor = findOption('White');
+        const bearingsStandard = findOption('Bearings Standard');
+        const urbanGrip = findOption('Urban Grip Premium');
+
+        if (
+            !handlebarPremium ||
+            !frameStandard ||
+            !redColor ||
+            !wheelsPremium ||
+            !bootStandard ||
+            !blackColor ||
+            !seatPremium ||
+            !whiteColor ||
+            !bearingsStandard
+        ) {
             throw new Error('One or more options not found. Ensure OptionSeeder has run.');
         }
 
-        const forbiddenCombination1 = forbiddenCombinationRepository.create({
-            name: 'Lite Premium Handlebar and Lite Premium Wheels -> No Black',
-        });
-        const savedCombination1 = await forbiddenCombinationRepository.save(forbiddenCombination1);
-
-        const forbiddenOptions1 = [
-            { forbiddenCombination: savedCombination1, option: liteHandlebarPremium },
-            { forbiddenCombination: savedCombination1, option: liteWheelsPremium },
-            { forbiddenCombination: savedCombination1, option: blackColor },
+        const forbiddenCombinations = [
+            {
+                name: 'Handlebar Premium and Frame Standard cannot be combined with Red Color',
+                options: [handlebarPremium, frameStandard, redColor],
+            },
+            {
+                name: 'Wheels Premium and Boot Standard cannot be combined with Black Color',
+                options: [wheelsPremium, bootStandard, blackColor],
+            },
+            {
+                name: 'Seat Premium cannot be combined with White Color',
+                options: [seatPremium, whiteColor],
+            },
+            {
+                name: 'Bearings Standard cannot be combined with Wheels Premium',
+                options: [bearingsStandard, wheelsPremium],
+            },
+            {
+                name: 'Boot Standard and Urban Grip Premium cannot be combined',
+                options: [bootStandard, urbanGrip],
+            },
         ];
-        await forbiddenCombinationOptionRepository.save(
-            forbiddenOptions1.map((fco) => forbiddenCombinationOptionRepository.create(fco))
-        );
 
-        const forbiddenCombination2 = forbiddenCombinationRepository.create({
-            name: 'Seat Premium -> No White',
-        });
-        const savedCombination2 = await forbiddenCombinationRepository.save(forbiddenCombination2);
+        for (const combination of forbiddenCombinations) {
+            const forbiddenCombination = forbiddenCombinationRepository.create({
+                name: combination.name,
+            });
+            const savedCombination = await forbiddenCombinationRepository.save(forbiddenCombination);
 
-        const forbiddenOptions2 = [
-            { forbiddenCombination: savedCombination2, option: seatPremium },
-            { forbiddenCombination: savedCombination2, option: whiteColor },
-        ];
-        await forbiddenCombinationOptionRepository.save(
-            forbiddenOptions2.map((fco) => forbiddenCombinationOptionRepository.create(fco))
-        );
+            const forbiddenOptions = combination.options.map(option => ({
+                forbiddenCombination: savedCombination,
+                option,
+            }));
 
-        console.log('Seeded Forbidden Combinations');
+            await forbiddenCombinationOptionRepository.save(
+                forbiddenOptions.map(fco => forbiddenCombinationOptionRepository.create(fco))
+            );
+        }
+
+        console.log('Seeded Forbidden Combinations with updated options for Bikes and Skates');
     }
 }

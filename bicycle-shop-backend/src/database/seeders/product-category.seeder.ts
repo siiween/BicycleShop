@@ -1,17 +1,26 @@
-import { ProductCategory } from '@entities/product-category.entity';
 import { DataSource } from 'typeorm';
+
+import { ProductCategory } from '@entities/product-category.entity';
 
 export class ProductCategorySeeder {
     public static async seed(dataSource: DataSource): Promise<void> {
         const productCategoryRepository = dataSource.getRepository(ProductCategory);
 
-        const bicycleCategory = productCategoryRepository.create({
-            name: 'Bicycle',
-            description: 'Category for bicycles and related products',
-        });
+        const categories = [
+            {
+                name: 'Bicycles',
+                description: 'Category for bicycles and related products',
+            },
+            {
+                name: 'Skates',
+                description: 'Category for skates and related products',
+            },
+        ];
 
-        await productCategoryRepository.save(bicycleCategory);
+        const categoryEntities = categories.map(category => productCategoryRepository.create(category));
 
-        console.log('Seeded ProductCategory: bicycle');
+        await productCategoryRepository.save(categoryEntities);
+
+        console.log('Seeded Product Categories: Skates and Bicycles');
     }
 }

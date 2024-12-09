@@ -1,6 +1,7 @@
+import { DataSource } from 'typeorm';
+
 import { Option } from '@entities/option.entity';
 import { Part } from '@entities/part.entity';
-import { DataSource } from 'typeorm';
 
 export class OptionSeeder {
     public static async seed(dataSource: DataSource): Promise<void> {
@@ -12,7 +13,7 @@ export class OptionSeeder {
             throw new Error('No parts found. Ensure PartSeeder has run.');
         }
 
-        const getRandom = (): number => Math.floor(Math.random() * 6);
+        const getRandom = (): number => Math.floor(Math.random() * 10);
 
         const optionsData = parts.map((part) => {
             if (part.name === 'Color') {
@@ -30,6 +31,7 @@ export class OptionSeeder {
         });
 
         const options = optionsData.flat().map((option) => optionRepository.create(option));
+
         await optionRepository.save(options);
 
         console.log('Seeded Options with random stock for all parts, including colors');
