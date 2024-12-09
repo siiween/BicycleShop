@@ -1,8 +1,9 @@
+import Link from 'next/link';
+
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import ForbiddenCombinationCard from '@/components/molecules/ForbiddenCombinationCard';
 import { ForbiddenCombination } from '@/types/apiTypes';
-import Link from 'next/link';
 
 interface ForbiddenCombinationsProps {
   forbiddenCombinations: ForbiddenCombination[];

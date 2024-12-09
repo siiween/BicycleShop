@@ -1,12 +1,15 @@
 'use client';
+
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { deletePart, updatePart } from '@/actions/partsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import Input from '@/components/atoms/Input';
 import { Part } from '@/types/apiTypes';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { handleError } from '@/lib/errorHandler';
 
 interface UpdatePartFormProps {
   part: Part;
@@ -50,9 +53,8 @@ const UpdatePartForm: React.FC<UpdatePartFormProps> = ({ part }) => {
       } else {
         throw new Error('Failed to update product');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error('Failed to update part');
+    } catch (error: unknown) {
+      handleError(error, 'Failed to update part');
     }
   }
 

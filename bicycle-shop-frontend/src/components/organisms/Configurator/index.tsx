@@ -1,15 +1,18 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { toast } from 'react-toastify';
+
 import { useConfiguratorStore } from '@/store/configuratorStore';
 import { Option, Part, Product } from '@/types/apiTypes';
 import PriceBanner from '@/components/molecules/PriceBanner.tsx';
-import Image from 'next/image';
 import Text from '@/components/atoms/Text';
 import { formatConflictMessage } from '@/lib/format';
-import { toast } from 'react-toastify';
 import { fetchOptionsByPartId } from '@/actions/optionsActions';
 import { validateOptionsCombinations } from '@/actions/forbiddenCombinationsActions';
 import ConfiguratorNavigation from '@/components/molecules/ConfiguratorNavigation';
+import { handleError } from '@/lib/errorHandler';
 
 interface ConfiguratorProps {
   initialParts: Part[];
@@ -43,7 +46,14 @@ const Configurator: React.FC<ConfiguratorProps> = ({
       setCurrentProduct(product.id);
     }
     setParts(initialParts);
-  }, [initialParts]);
+  }, [
+    initialParts,
+    product.id,
+    reset,
+    setCurrentProduct,
+    setParts,
+    currentProduct,
+  ]);
 
   const currentPart = parts[currentStep];
 
@@ -54,8 +64,8 @@ const Configurator: React.FC<ConfiguratorProps> = ({
       try {
         const { data } = await fetchOptionsByPartId(currentPart.id);
         setOptions(data);
-      } catch (err: any) {
-        setError('Failed to load options');
+      } catch (error: unknown) {
+        handleError(error, 'Failed to load options');
       } finally {
         setLoading(false);
       }

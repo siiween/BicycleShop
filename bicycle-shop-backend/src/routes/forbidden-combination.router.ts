@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { ForbiddenCombinationController } from '@controllers/forbidden-combination.controller';
 import { param, body } from 'express-validator';
 import { validate } from '@middlewares/validate.middleware';
+import { ForbiddenCombinationController } from '@controllers/forbidden-combination.controller';
 
 const router = Router();
 
@@ -85,6 +85,28 @@ router.post(
     validate,
     ForbiddenCombinationController.validateProductConfiguration
 );
+
+
+router.post(
+    '/checkout',
+    [
+        body('products')
+            .isArray({ min: 1 })
+            .withMessage('Products must be a non-empty array'),
+        body('products.*.productId')
+            .isInt({ gt: 0 })
+            .withMessage('Product ID must be a positive integer'),
+        body('products.*.selectedOptionIds')
+            .isArray()
+            .withMessage('Selected Option IDs must be an array'),
+        body('products.*.selectedOptionIds.*')
+            .isInt({ gt: 0 })
+            .withMessage('Each Selected Option ID must be a positive integer'),
+    ],
+    validate,
+    ForbiddenCombinationController.checkout
+);
+
 
 
 export default router;

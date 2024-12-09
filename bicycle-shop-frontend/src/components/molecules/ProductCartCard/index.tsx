@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { TrashIcon } from '@heroicons/react/24/outline';
+
 import { calculateOptionsPrice } from '@/actions/optionsActions';
 import Text from '@/components/atoms/Text';
 import { Product } from '@/types/apiTypes';
 import Button from '@/components/atoms/Button';
-import { TrashIcon } from '@heroicons/react/24/outline';
 
 interface ProductCartCardProps {
   product: {

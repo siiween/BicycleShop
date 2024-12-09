@@ -1,7 +1,6 @@
 import { fetchCategories } from '@/actions/categoriesActions';
 import Text from '@/components/atoms/Text';
 import CreateProductForm from '@/components/organisms/CreateProductForm';
-import { useState } from 'react';
 
 export default async function CreateProductAdmin() {
   const { data: categories } = await fetchCategories();

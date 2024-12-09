@@ -1,6 +1,5 @@
 import { fetchCategories } from '@/actions/categoriesActions';
 import { fetchProductsByCategory } from '@/actions/productsActions';
-import Text from '@/components/atoms/Text';
 import SelectProductsByCategory from '@/components/organisms/SelectProductsByCategory';
 import { Category } from '@/types/apiTypes';
 

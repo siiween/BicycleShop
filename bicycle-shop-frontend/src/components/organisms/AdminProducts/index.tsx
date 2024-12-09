@@ -1,8 +1,9 @@
+import Link from 'next/link';
+
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import ProductAdminCard from '@/components/molecules/ProductAdminCard';
 import { Product } from '@/types/apiTypes';
-import Link from 'next/link';
 
 interface AdminProductsProps {
   products: Product[];

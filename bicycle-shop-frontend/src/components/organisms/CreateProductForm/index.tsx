@@ -1,12 +1,15 @@
 'use client';
+
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { createProduct } from '@/actions/productsActions';
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 import Select from '@/components/atoms/Select';
 import { Category } from '@/types/apiTypes';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { handleError } from '@/lib/errorHandler';
 
 interface CreateProductFormProps {
   categories: Category[];
@@ -54,9 +57,8 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
       } else {
         throw new Error('Failed to create product');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error('Failed to create product');
+    } catch (error: unknown) {
+      handleError(error, 'Failed to create product');
     }
   }
 

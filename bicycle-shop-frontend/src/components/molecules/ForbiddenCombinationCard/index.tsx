@@ -1,10 +1,13 @@
 'use client';
+
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+
 import Text from '@/components/atoms/Text';
 import Button from '@/components/atoms/Button';
 import { Option } from '@/types/apiTypes';
 import { deleteForbiddenCombination } from '@/actions/forbiddenCombinationsActions';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
+
 import OptionMiniCard from '../OptionMiniCard';
 
 interface ForbiddenCombinationCardProps {
@@ -22,7 +25,9 @@ const ForbiddenCombinationCard: React.FC<ForbiddenCombinationCardProps> = ({
   id,
 }) => {
   const router = useRouter();
+
   const handleDelete = async () => {
+    console.log('delete');
     try {
       const { success } = await deleteForbiddenCombination(id);
       if (success) {

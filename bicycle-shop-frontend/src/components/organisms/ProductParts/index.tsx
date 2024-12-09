@@ -1,13 +1,16 @@
 'use client';
+
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { disassociatePartFromProduct } from '@/actions/productsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import AssociatePartModal from '@/components/molecules/AssociatePartModal';
 import { Part } from '@/types/apiTypes';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { handleError } from '@/lib/errorHandler';
 
 interface ProductPartsProps {
   parts: Part[];
@@ -33,8 +36,8 @@ const ProductParts: React.FC<ProductPartsProps> = ({
       } else {
         throw new Error('Failed to disassociate part');
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      handleError(error, 'Failed to disassociate part');
     }
   };
 

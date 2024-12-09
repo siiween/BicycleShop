@@ -5,6 +5,7 @@ import { Option } from '@database/entities/option.entity';
 import { HttpError } from '@errors/http-error.class';
 import { Product } from '@entities/product.entity';
 import { getValidForbiddenCombinations, validateForbiddenCombinations, validatePartsConfiguration, validateStockAndAvailability } from '@utils/forbidden-combination.utils';
+import { In } from 'typeorm';
 
 export class ForbiddenCombinationService {
 
@@ -145,4 +146,118 @@ export class ForbiddenCombinationService {
         return { isValid: true, missingParts: [], invalidOptions: [], conflictingOptions: [] };
     }
 
+
+    static async processCheckout(
+        products: Array<{ productId: number; selectedOptionIds: number[] }>
+    ): Promise<{
+        success: boolean;
+        errors: Array<{
+            productId: number;
+            missingParts: number[];
+            invalidOptions: number[];
+            insufficientStock: number[];
+        }>;
+        totalPrice: number;
+    }> {
+        const errors: Array<{
+            productId: number;
+            missingParts: number[];
+            invalidOptions: number[];
+            insufficientStock: number[];
+        }> = [];
+        let totalPrice = 0;
+
+        for (const { productId, selectedOptionIds } of products) {
+            const product = await AppDataSource.getRepository(Product).findOne({
+                where: { id: productId },
+                relations: ['productParts', 'productParts.part', 'productParts.part.options'],
+            });
+
+            if (!product) {
+                errors.push({
+                    productId,
+                    missingParts: [],
+                    invalidOptions: [],
+                    insufficientStock: [],
+                });
+                continue;
+            }
+
+            const { missingParts, invalidOptions } = validatePartsConfiguration(
+                product,
+                new Set(selectedOptionIds)
+            );
+
+            if (missingParts.length > 0 || invalidOptions.length > 0) {
+                errors.push({
+                    productId,
+                    missingParts,
+                    invalidOptions,
+                    insufficientStock: [],
+                });
+                continue;
+            }
+
+            const options = await AppDataSource.getRepository(Option).find({
+                where: { id: In(selectedOptionIds) },
+                relations: ['dependentPrices', 'dependentPrices.conditionOption'],
+            });
+
+            const insufficientStock = options.filter(
+                (option) => option.quantity < selectedOptionIds.filter((id) => id === option.id).length
+            ).map((option) => option.id);
+
+            if (insufficientStock.length > 0) {
+                errors.push({
+                    productId,
+                    missingParts: [],
+                    invalidOptions: [],
+                    insufficientStock,
+                });
+                continue;
+            }
+
+            // Calcular el precio total de este producto
+            let productPrice = 0;
+            const appliedDependencies: Set<number> = new Set();
+
+            options.forEach((option) => {
+                const basePrice = Number(option.price);
+                let optionPrice = basePrice;
+
+                const applicableDependencies = option.dependentPrices.filter((dependency) =>
+                    selectedOptionIds.includes(dependency.conditionOption.id)
+                );
+
+                if (applicableDependencies.length > 0 && !appliedDependencies.has(option.id)) {
+                    optionPrice = Math.max(
+                        ...applicableDependencies.map((dependency) => Number(dependency.price))
+                    );
+                    appliedDependencies.add(option.id);
+                }
+
+                productPrice += optionPrice;
+            });
+
+            totalPrice += productPrice;
+        }
+
+        if (errors.length > 0) {
+            return { success: false, errors, totalPrice: 0 };
+        }
+
+        // Actualizar el stock solo si no hay errores
+        for (const { selectedOptionIds } of products) {
+            for (const optionId of selectedOptionIds) {
+                await AppDataSource.getRepository(Option)
+                    .createQueryBuilder()
+                    .update(Option)
+                    .set({ quantity: () => 'quantity - 1' })
+                    .where('id = :id', { id: optionId })
+                    .execute();
+            }
+        }
+
+        return { success: true, errors: [], totalPrice };
+    }
 }

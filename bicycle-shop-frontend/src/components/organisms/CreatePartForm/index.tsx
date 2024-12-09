@@ -1,10 +1,13 @@
 'use client';
-import { createPart } from '@/actions/partsActions';
-import Button from '@/components/atoms/Button';
-import Input from '@/components/atoms/Input';
+
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+
+import { createPart } from '@/actions/partsActions';
+import Button from '@/components/atoms/Button';
+import Input from '@/components/atoms/Input';
+import { handleError } from '@/lib/errorHandler';
 
 const CreatePartForm: React.FC = () => {
   const router = useRouter();
@@ -44,9 +47,8 @@ const CreatePartForm: React.FC = () => {
       } else {
         throw new Error('Failed to create part');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error('Failed to create part');
+    } catch (error: unknown) {
+      handleError(error, 'Failed to create part');
     }
   }
 

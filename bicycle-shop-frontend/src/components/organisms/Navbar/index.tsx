@@ -1,12 +1,14 @@
 'use client';
 
-import { ShoppingCartIcon } from '@heroicons/react/24/outline';
-import Text from '@/components/atoms/Text';
-import Button from '@/components/atoms/Button';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import Cart from '../Cart';
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+
+import Text from '@/components/atoms/Text';
+import Button from '@/components/atoms/Button';
 import NavLink from '@/components/atoms/NavLink';
+
+import Cart from '../Cart';
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();

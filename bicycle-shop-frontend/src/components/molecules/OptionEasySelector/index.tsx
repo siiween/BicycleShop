@@ -1,9 +1,11 @@
 'use client';
+
+import { useEffect, useState } from 'react';
+
 import { fetchOptionsByPartId } from '@/actions/optionsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import { Option, Part } from '@/types/apiTypes';
-import { useEffect, useState } from 'react';
 
 interface OptionEasySelectorProps {
   parts: Part[];

@@ -1,12 +1,15 @@
 'use client';
-import { Part } from '@/types/apiTypes';
-import Modal from '../Modal';
-import Text from '@/components/atoms/Text';
-import Button from '@/components/atoms/Button';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useMemo } from 'react';
+
+import Text from '@/components/atoms/Text';
+import Button from '@/components/atoms/Button';
 import { associatePartToProduct } from '@/actions/productsActions';
-import { useRouter } from 'next/navigation';
+import { Part } from '@/types/apiTypes';
+import { handleError } from '@/lib/errorHandler';
+
+import Modal from '../Modal';
 
 interface AssociatePartModalProps {
   onClose: () => void;
@@ -40,8 +43,8 @@ const AssociatePartModal: React.FC<AssociatePartModalProps> = ({
       } else {
         throw new Error('Failed to associate part');
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      handleError(error, 'Failed to associate part');
     }
   };
 

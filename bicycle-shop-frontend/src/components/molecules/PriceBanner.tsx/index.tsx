@@ -1,8 +1,11 @@
 'use client';
+
+import { useEffect, useState } from 'react';
+
 import { calculateOptionsPrice } from '@/actions/optionsActions';
 import Text from '@/components/atoms/Text';
 import { OptionsPrice, Part } from '@/types/apiTypes';
-import { useEffect, useState } from 'react';
+import { handleError } from '@/lib/errorHandler';
 
 interface PriceBannerProps {
   selectedOptions: Record<number, { id: number; name: string }>;
@@ -27,8 +30,8 @@ const PriceBanner: React.FC<PriceBannerProps> = ({
         );
 
         setPrice(data);
-      } catch (err: any) {
-        setError('Failed to load prices');
+      } catch (error: unknown) {
+        handleError(error, 'Failed to load prices');
       } finally {
         setLoading(false);
       }

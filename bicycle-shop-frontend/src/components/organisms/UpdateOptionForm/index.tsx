@@ -1,13 +1,16 @@
 'use client';
-import Button from '@/components/atoms/Button';
-import Input from '@/components/atoms/Input';
-import Text from '@/components/atoms/Text';
+
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+
 import { updateOption } from '@/actions/optionsActions';
 import Checkbox from '@/components/atoms/Checkbox';
 import { Option } from '@/types/apiTypes';
+import Button from '@/components/atoms/Button';
+import Input from '@/components/atoms/Input';
+import Text from '@/components/atoms/Text';
+import { handleError } from '@/lib/errorHandler';
 
 interface UpdateOptionFormProps {
   option: Option;
@@ -70,9 +73,8 @@ const UpdateOptionForm: React.FC<UpdateOptionFormProps> = ({ option }) => {
       } else {
         throw new Error('Failed to update option');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error('Failed to update option');
+    } catch (error: unknown) {
+      handleError(error, 'Failed to update option');
     }
   }
 

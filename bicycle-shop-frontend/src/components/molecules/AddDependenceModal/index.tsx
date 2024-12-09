@@ -1,11 +1,14 @@
-import { Option, Part } from '@/types/apiTypes';
-import Input from '../../atoms/Input';
-import Modal from '../Modal';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+import { Option, Part } from '@/types/apiTypes';
 import { createDependentPrice } from '@/actions/dependentPrices';
+import Input from '@/components/atoms/Input';
+import { handleError } from '@/lib/errorHandler';
+
 import OptionEasySelector from '../OptionEasySelector';
+import Modal from '../Modal';
 
 interface AddDependenceModalProps {
   option: Option;
@@ -47,9 +50,8 @@ const AddDependenceModal: React.FC<AddDependenceModalProps> = ({
       } else {
         throw new Error('Failed to create dependence');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error('Failed to create dependence');
+    } catch (error: unknown) {
+      handleError(error, 'Failed to create dependence');
     }
   }
 

@@ -1,7 +1,7 @@
 'use client';
+
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
-import React from 'react';
 
 interface GlobalErrorProps {
   error: Error;
@@ -10,7 +10,7 @@ interface GlobalErrorProps {
 
 const GlobalError: React.FC<GlobalErrorProps> = ({ error, reset }) => {
   return (
-    <html>
+    <html lang="en">
       <body>
         <div className="h-screen flex flex-col items-center justify-center bg-gray-100 text-center">
           <Text as="h1" size="4xl" className=" font-bold text-red-600">

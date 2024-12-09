@@ -4,8 +4,6 @@ import { Part } from '@database/entities/part.entity';
 import { HttpError } from '@errors/http-error.class';
 import { In } from 'typeorm';
 import { CalculatePriceResponse, OptionResult } from '@interfaces/option.interface';
-import { ForbiddenCombinationOption } from '@entities/forbidden-combination-option.entity';
-import { ForbiddenCombination } from '@entities/forbidden-combination.entity';
 import { cleanUpForbiddenCombinations } from '@utils/forbidden-combination.utils';
 import { DependentPrice } from '@entities/dependent-price.entity';
 

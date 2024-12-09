@@ -1,7 +1,6 @@
 import { fetchCategories } from '@/actions/categoriesActions';
 import { fetchParts, fetchPartsByProductId } from '@/actions/partsActions';
 import { fetchProductById } from '@/actions/productsActions';
-
 import ProductParts from '@/components/organisms/ProductParts';
 import UpdateProductForm from '@/components/organisms/UpdateProductForm';
 

@@ -11,6 +11,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bicycle_shop_network
 
   backend:
     build:
@@ -18,12 +20,20 @@ services:
       dockerfile: ./bicycle-shop-backend/Dockerfile
     container_name: bicycle_shop_backend
     restart: always
-    env_file:
-      - ./bicycle-shop-backend/.env
     ports:
       - "3030:3030"
     depends_on:
       - postgres
+    environment:
+      PORT: 3030
+      DB_TYPE: postgres
+      DB_HOST: postgres_bicycle_shop
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgrespassword
+      DB_NAME: bicycle_shop
+    networks:
+      - bicycle_shop_network
 
   frontend:
     build:
@@ -35,6 +45,14 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://bicycle_shop_backend:3030
+    networks:
+      - bicycle_shop_network
 
 volumes:
   postgres_data:
+
+networks:
+  bicycle_shop_network:
+    driver: bridge

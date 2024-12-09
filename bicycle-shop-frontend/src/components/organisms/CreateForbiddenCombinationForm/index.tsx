@@ -1,13 +1,16 @@
 'use client';
+
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { createForbiddenCombination } from '@/actions/forbiddenCombinationsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import Input from '@/components/atoms/Input';
 import OptionEasySelector from '@/components/molecules/OptionEasySelector';
 import { Option, Part } from '@/types/apiTypes';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { handleError } from '@/lib/errorHandler';
 
 interface CreateForbiddenCombinationFormProps {
   parts: Part[];
@@ -56,9 +59,8 @@ const CreateForbiddenCombinationForm: React.FC<
       } else {
         throw new Error('Failed to create forbidden comnination');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error('Failed to create forbidden comnination');
+    } catch (error: unknown) {
+      handleError(error, 'Failed to create forbidden comnination');
     }
   }
 

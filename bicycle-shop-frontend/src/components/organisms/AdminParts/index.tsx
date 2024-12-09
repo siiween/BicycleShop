@@ -1,8 +1,9 @@
+import Link from 'next/link';
+
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import PartAdminCard from '@/components/molecules/PartAdminCard';
 import { Part } from '@/types/apiTypes';
-import Link from 'next/link';
 
 interface AdminPartsProps {
   parts: Part[];

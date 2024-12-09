@@ -116,5 +116,30 @@ export class ForbiddenCombinationController {
             next(error);
         }
     };
+    static checkout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        const { products } = req.body;
 
+        try {
+            const result = await ForbiddenCombinationService.processCheckout(products);
+
+            if (!result.success) {
+                res.status(400).json({
+                    success: false,
+                    message: 'One or more products have validation issues.',
+                    errors: result.errors,
+                });
+                return;
+            }
+
+            const response: ApiResponse = {
+                success: true,
+                message: 'Checkout completed successfully. Stock has been updated.',
+                data: { totalPrice: result.totalPrice },
+            };
+
+            res.json(response);
+        } catch (error) {
+            next(error);
+        }
+    };
 }

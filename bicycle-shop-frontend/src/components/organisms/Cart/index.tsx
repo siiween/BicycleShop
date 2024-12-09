@@ -1,10 +1,14 @@
 'use client';
 
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
+
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import ProductCartCard from '@/components/molecules/ProductCartCard';
 import { useShoppingCart } from '@/hooks/useShoppingCart';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { handleError } from '@/lib/errorHandler';
+import { checkout } from '@/actions/forbiddenCombinationsActions';
 
 interface CartProps {
   onClose: () => void;
@@ -12,6 +16,28 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = ({ onClose }) => {
   const { cart, clearCart, removeProduct } = useShoppingCart();
+
+  const handleCheckout = async () => {
+    const products = cart.products.map((config) => ({
+      productId: config.product.id,
+      selectedOptionIds: config.options.map((option) => option.id),
+    }));
+
+    try {
+      const {
+        success,
+        data: { totalPrice },
+      } = await checkout(products);
+
+      if (success) {
+        clearCart();
+        onClose();
+        toast.success('Checkout successful, total price: ' + totalPrice + '€');
+      }
+    } catch (error: unknown) {
+      handleError(error, 'Failed to checkout');
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end items-center z-20">
@@ -41,7 +67,9 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
           <Button className="w-full" variant="outline" onClick={clearCart}>
             Clear cart
           </Button>
-          <Button className="w-full">Checkout</Button>
+          <Button className="w-full" onClick={handleCheckout}>
+            Checkout
+          </Button>
         </div>
       </div>
     </div>

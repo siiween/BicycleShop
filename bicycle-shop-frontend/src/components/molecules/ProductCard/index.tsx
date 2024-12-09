@@ -1,8 +1,10 @@
 'use client';
+
 import Image from 'next/image';
-import Text from '@/components/atoms/Text';
 import Link from 'next/link';
 import { ArrowRightIcon } from '@heroicons/react/16/solid';
+
+import Text from '@/components/atoms/Text';
 import { useConfiguratorStore } from '@/store/configuratorStore';
 
 interface ArtistCardProps {

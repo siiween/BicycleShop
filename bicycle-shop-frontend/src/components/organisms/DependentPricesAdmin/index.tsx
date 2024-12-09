@@ -1,11 +1,12 @@
 'use client';
 
+import { useState } from 'react';
+
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import AddDependenceModal from '@/components/molecules/AddDependenceModal';
 import DependenceCard from '@/components/molecules/DependenceCard';
 import { DependentPrice, Option, Part } from '@/types/apiTypes';
-import { useState } from 'react';
 
 interface DependentPricesAdminProps {
   option: Option;

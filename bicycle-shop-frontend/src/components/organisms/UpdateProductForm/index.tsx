@@ -1,13 +1,16 @@
 'use client';
+
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { deleteProduct, updateProduct } from '@/actions/productsActions';
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 import Select from '@/components/atoms/Select';
 import Text from '@/components/atoms/Text';
 import { Category, Product } from '@/types/apiTypes';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { handleError } from '@/lib/errorHandler';
 
 interface UpdateProductFormProps {
   categories: Category[];
@@ -60,9 +63,8 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
       } else {
         throw new Error('Failed to update product');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error('Failed to update product');
+    } catch (error: unknown) {
+      handleError(error, 'Failed to update product');
     }
   }
 

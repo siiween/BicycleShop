@@ -1,10 +1,12 @@
 'use client';
+
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+
 import { deleteDependentPrice } from '@/actions/dependentPrices';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import { DependentPrice } from '@/types/apiTypes';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 
 interface DependenceCardProps {
   dependence: DependentPrice;

@@ -1,10 +1,13 @@
 'use client';
-import { createOption } from '@/actions/optionsActions';
-import Button from '@/components/atoms/Button';
-import Input from '@/components/atoms/Input';
+
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+
+import { createOption } from '@/actions/optionsActions';
+import Button from '@/components/atoms/Button';
+import Input from '@/components/atoms/Input';
+import { handleError } from '@/lib/errorHandler';
 
 interface CreateOptionFormProps {
   partId: number;
@@ -61,9 +64,8 @@ const CreateOptionForm: React.FC<CreateOptionFormProps> = ({ partId }) => {
       } else {
         throw new Error('Failed to create option');
       }
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error('Failed to create option');
+    } catch (error: unknown) {
+      handleError(error, 'Failed to create option');
     }
   }
 

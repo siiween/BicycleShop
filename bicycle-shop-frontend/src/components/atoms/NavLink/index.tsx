@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import Text from '../Text';
 
 interface NavLinkProps {

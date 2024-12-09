@@ -1,11 +1,12 @@
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+
 import { validateOptionsCombinations } from '@/actions/forbiddenCombinationsActions';
 import Button from '@/components/atoms/Button';
 import { useShoppingCart } from '@/hooks/useShoppingCart';
 import { useConfiguratorStore } from '@/store/configuratorStore';
 import { Option, Part, Product } from '@/types/apiTypes';
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 
 interface ConfiguratorNavigationProps {
   previousStep: () => void;
@@ -27,7 +28,7 @@ const ConfiguratorNavigation: React.FC<ConfiguratorNavigationProps> = ({
   product,
 }) => {
   const { addProduct } = useShoppingCart();
-  const { reset } = useConfiguratorStore();
+  const { reset, setCurrentProduct } = useConfiguratorStore();
   const router = useRouter();
 
   const addToCart = async () => {
@@ -44,6 +45,7 @@ const ConfiguratorNavigation: React.FC<ConfiguratorNavigationProps> = ({
         toast.success('Product added to cart');
         router.push('/');
         reset();
+        setCurrentProduct(null);
       }
     } catch (err) {
       console.log(err);

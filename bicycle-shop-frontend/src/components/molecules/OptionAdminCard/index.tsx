@@ -1,11 +1,13 @@
 'use client';
+
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+
 import { deleteOption } from '@/actions/optionsActions';
 import Button from '@/components/atoms/Button';
 import Text from '@/components/atoms/Text';
 import { Option } from '@/types/apiTypes';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 
 interface OptionAdminCardProps {
   option: Option;
