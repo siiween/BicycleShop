@@ -34,6 +34,7 @@ services:
       DB_NAME: bicycle_shop
       MOCK_AWS: true
       BACKEND_URL: http://bicycle_shop_backend
+      RUN_SEED: "false" # Por defecto, no se ejecuta el seed
     networks:
       - bicycle_shop_network
 

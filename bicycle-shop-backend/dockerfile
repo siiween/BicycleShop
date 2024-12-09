@@ -11,4 +11,4 @@ COPY ./bicycle-shop-backend ./
 
 EXPOSE 3030
 
-CMD ["sh", "-c", "npm run seed && npm start"]
+CMD ["sh", "-c", "if [ \"$RUN_SEED\" = \"true\" ]; then npm run seed; fi && npm start"]
