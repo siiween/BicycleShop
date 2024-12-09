@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { ProductService } from '@services/product.service';
 import { ApiResponse } from '@interfaces/api-response.interface';
-import { uploadImageToS3 } from '@utils/upload-image.util';
+import { uploadImage } from '@utils/upload-image.util';
 export class ProductController {
     static getAll = async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -34,9 +34,11 @@ export class ProductController {
 
     static create = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // const { file } = req;
-            // const imageUrl = file ? await uploadImageToS3(file) : undefined;
-            const product = await ProductService.createProduct({ ...req.body });
+
+            const { file } = req;
+            const imageUrl = file ? await uploadImage(file) : `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/default.png`;
+
+            const product = await ProductService.createProduct({ ...req.body }, imageUrl);
 
             const response: ApiResponse = {
                 success: true,
@@ -52,10 +54,11 @@ export class ProductController {
     static update = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-            // const { file } = req;
-            // const imageUrl = file ? await uploadImageToS3(file) : undefined;
+            const { file } = req;
+            const imageUrl = file ? await uploadImage(file) : undefined;
 
-            const product = await ProductService.updateProduct(parseInt(id), { ...req.body });
+            console.log(imageUrl, req.body)
+            const product = await ProductService.updateProduct(parseInt(id), { ...req.body }, imageUrl);
 
             const response: ApiResponse = {
                 success: true,

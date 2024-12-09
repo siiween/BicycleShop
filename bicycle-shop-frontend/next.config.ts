@@ -10,6 +10,7 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    domains: ['localhost', 'bicycle_shop_backend'],
   },
 };
 

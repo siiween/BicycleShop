@@ -56,3 +56,6 @@ jest-test-results.json
 *.bak
 *.orig
 *.rej
+
+
+*/uploads/products/

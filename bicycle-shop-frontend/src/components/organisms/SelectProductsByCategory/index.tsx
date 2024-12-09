@@ -28,9 +28,7 @@ const SelectProductsByCategory: React.FC<SelectProductsByCategoryProps> = ({
             productId={product.id}
             name={product.name}
             description={product.description}
-            imageUrl={
-              'https://images.cyclingfactory.be/GRIFNEROAD_image_1024x.png'
-            }
+            imageUrl={product.image_url}
             href={'/configurator/' + product.id}
           />
         ))}

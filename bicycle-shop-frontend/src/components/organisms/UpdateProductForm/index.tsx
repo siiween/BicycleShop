@@ -11,6 +11,7 @@ import Select from '@/components/atoms/Select';
 import Text from '@/components/atoms/Text';
 import { Category, Product } from '@/types/apiTypes';
 import { handleError } from '@/lib/errorHandler';
+import Image from 'next/image';
 
 interface UpdateProductFormProps {
   categories: Category[];
@@ -27,15 +28,31 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
     name: product.name,
     description: product.description,
     category_id: product.category.id,
+    image: null as File | null,
   });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    if (
+      name === 'image' &&
+      e.target instanceof HTMLInputElement &&
+      e.target.files
+    ) {
+      const file = e.target.files[0];
+      if (!file.type.startsWith('image/')) {
+        toast.error('The selected file must be an image');
+        return;
+      }
+      setFormData({ ...formData, image: file });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   async function handleSubmit(e: React.FormEvent) {
@@ -46,12 +63,13 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
       return;
     }
 
-    const formattedData = {
-      name: formData.name,
-      description: formData.description,
-      category_id: Number(formData.category_id),
-    };
-
+    const formattedData = new FormData();
+    formattedData.append('name', formData.name);
+    formattedData.append('description', formData.description);
+    formattedData.append('category_id', formData.category_id.toString());
+    if (formData.image) {
+      formattedData.append('image', formData.image);
+    }
     try {
       const { success } = await updateProduct(
         formattedData,
@@ -103,48 +121,75 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg p-5 border border-neutral-300"
+        className="bg-white rounded-lg border border-neutral-300"
       >
-        <div className="grid grid-cols-2 gap-5">
-          <div>
-            <Input
-              placeholder="Name"
-              id="name"
-              name="name"
-              label="Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
+        <div className="grid grid-cols-6 items-center">
+          <div className="col-span-1 relative aspect-square overflow-hidden">
+            <Image
+              src={product.image_url}
+              alt={`${product.name} image`}
+              fill
+              sizes="180px"
+              className="object-cover object-right"
+              priority
             />
           </div>
-          <div>
-            <Select
-              id="category_id"
-              name="category_id"
-              label="Category"
-              value={formData.category_id}
-              onChange={handleChange}
-              required
-              options={categories.map((category) => ({
-                value: category.id,
-                label: category.name,
-              }))}
-              placeholder="Select a category"
-            />
-          </div>
-          <div className="col-span-2">
-            <Input
-              placeholder="Description"
-              id="description"
-              name="description"
-              label="Description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
+
+          <div className="col-span-5 grid grid-cols-2 gap-5 h-fit p-5">
+            <div>
+              <Input
+                placeholder="Name"
+                id="name"
+                name="name"
+                label="Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <Select
+                id="category_id"
+                name="category_id"
+                label="Category"
+                value={formData.category_id}
+                onChange={handleChange}
+                required
+                options={categories.map((category) => ({
+                  value: category.id,
+                  label: category.name,
+                }))}
+                placeholder="Select a category"
+              />
+            </div>
+            <div className="col-span-2">
+              <Input
+                placeholder="Description"
+                id="description"
+                name="description"
+                label="Description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="col-span-2">
+              <label
+                htmlFor="image"
+                className="block font-medium text-gray-700 mb-1"
+              >
+                Image <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                onChange={handleChange}
+              />
+            </div>
           </div>
         </div>
-        <div className="flex justify-end mt-5">
+        <div className="flex justify-end p-5">
           <Button type="submit" variant="outline">
             Update
           </Button>

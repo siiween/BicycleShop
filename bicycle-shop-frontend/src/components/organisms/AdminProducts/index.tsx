@@ -28,6 +28,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products }) => {
             category={product.category.name}
             description={product.description}
             href={'/admin/products/' + product.id}
+            imageUrl={product.image_url}
           />
         ))}
       </div>

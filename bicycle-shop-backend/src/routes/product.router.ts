@@ -21,6 +21,7 @@ const productValidation = [
     body('category_id')
         .optional()
         .isInt({ gt: 0 }).withMessage('Category ID must be a positive integer'),
+
 ];
 
 
@@ -40,7 +41,7 @@ router.get(
 
 router.post(
     '/',
-    // upload.single('image'),
+    upload.single('image'),
     [
         body('name')
             .isString().withMessage('Name must be a string')
@@ -55,7 +56,7 @@ router.post(
 
 router.put(
     '/:id',
-    // upload.single('image'),
+    upload.single('image'),
     [
         ...idValidation,
         ...productValidation,

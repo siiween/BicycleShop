@@ -32,6 +32,8 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: postgrespassword
       DB_NAME: bicycle_shop
+      MOCK_AWS: true
+      BACKEND_URL: http://bicycle_shop_backend
     networks:
       - bicycle_shop_network
 
@@ -46,7 +48,7 @@ services:
     depends_on:
       - backend
     environment:
-      NEXT_PUBLIC_API_BASE_URL: http://bicycle_shop_backend:3030
+      REACT_APP_API_URL: http://bicycle_shop_backend:3030
     networks:
       - bicycle_shop_network
 

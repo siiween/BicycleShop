@@ -23,12 +23,13 @@ const ProductCard: React.FC<ArtistCardProps> = ({
   productId,
 }) => {
   const { currentProduct } = useConfiguratorStore();
+
   return (
     <Link
       href={href}
       className="grid grid-cols-5 items-center gap-5 w-full hover:bg-neutral-200 hover:shadow transition-all bg-neutral-100 rounded-lg border border-neutral-300"
     >
-      <div className="col-span-2 relative aspect-square rounded-lg overflow-hidden">
+      <div className="col-span-2 relative aspect-square overflow-hidden">
         <Image
           src={imageUrl}
           alt={name + ' image'}

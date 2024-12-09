@@ -46,12 +46,6 @@ export interface OptionsPrice {
   total: number;
 }
 
-export interface CreateProduct extends Record<string, unknown> {
-  name: string;
-  description: string;
-  category_id: number;
-}
-
 export interface CreatePart extends Record<string, unknown> {
   name: string;
   description: string;

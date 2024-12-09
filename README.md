@@ -37,10 +37,17 @@ al usar zustand para la configuracion se acuerda de la ultima configuracion que 
 
 Si usaramos carrito en el back podriamos guardas las configuraciones para poder rehacerlas mas tarde, como hacen las webs de coches
 
-Mejorar las validaciones en el frontend 
-
+Mejorar las validaciones de formularios en el frontend 
 
 en el docker no usamos build y start ya que daria error al hacer buuld porque espera que la api este activa en el puerto 3030 pero aun no lo esta. Por eso usamos server de dev para el docker
 
 
 con este sistema de carritos hay problemas de sincronizacion de stock si hay muchas compras
+
+mejorar sistema de errores en el front
+
+
+la idea era tener imagenes por opcion, parte, producto... pero la deseche y oslo lo hice por producto
+
+cambiar url de imagenes
+

@@ -28,7 +28,7 @@ const ConfiguratorNavigation: React.FC<ConfiguratorNavigationProps> = ({
   product,
 }) => {
   const { addProduct } = useShoppingCart();
-  const { reset, setCurrentProduct } = useConfiguratorStore();
+  const { reset } = useConfiguratorStore();
   const router = useRouter();
 
   const addToCart = async () => {
@@ -45,7 +45,6 @@ const ConfiguratorNavigation: React.FC<ConfiguratorNavigationProps> = ({
         toast.success('Product added to cart');
         router.push('/');
         reset();
-        setCurrentProduct(null);
       }
     } catch (err) {
       console.log(err);

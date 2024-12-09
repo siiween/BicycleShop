@@ -24,30 +24,53 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
     name: '',
     description: '',
     category_id: '',
+    image: null as File | null,
   });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    if (
+      name === 'image' &&
+      e.target instanceof HTMLInputElement &&
+      e.target.files
+    ) {
+      const file = e.target.files[0];
+      if (!file.type.startsWith('image/')) {
+        toast.error('The selected file must be an image');
+        return;
+      }
+      setFormData({ ...formData, image: file });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!formData.name || !formData.description || !formData.category_id) {
+    if (
+      !formData.name ||
+      !formData.description ||
+      !formData.category_id ||
+      !formData.image
+    ) {
       toast.error('All fields are required');
       return;
     }
 
-    const formattedData = {
-      name: formData.name,
-      description: formData.description,
-      category_id: Number(formData.category_id),
-    };
+    const formattedData = new FormData();
+    formattedData.append('name', formData.name);
+    formattedData.append('description', formData.description);
+    formattedData.append('category_id', formData.category_id);
+    if (formData.image) {
+      formattedData.append('image', formData.image);
+    }
 
     try {
       const { success, data: newProduct } = await createProduct(formattedData);
@@ -98,6 +121,21 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
             name="description"
             label="Description"
             value={formData.description}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="col-span-2">
+          <label
+            htmlFor="image"
+            className="block font-medium text-gray-700 mb-1"
+          >
+            Image <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="file"
+            id="image"
+            name="image"
             onChange={handleChange}
             required
           />

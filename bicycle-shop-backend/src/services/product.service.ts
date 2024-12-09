@@ -46,6 +46,8 @@ export class ProductService {
                 throw new HttpError(404, 'Category not found');
             }
 
+
+
             const product = new Product();
             product.name = name;
             product.description = description;

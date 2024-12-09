@@ -117,11 +117,9 @@ const Configurator: React.FC<ConfiguratorProps> = ({
     <div className="flex flex-row gap-10">
       <div className="flex flex-col grow">
         <div className="grid grid-cols-5 gap-10">
-          <div className="col-span-2 relative aspect-square rounded-lg overflow-hidden">
+          <div className="col-span-2 relative aspect-square overflow-hidden">
             <Image
-              src={
-                'https://images.cyclingfactory.be/GRIFNEROAD_image_1024x.png'
-              }
+              src={product.image_url}
               alt={`${currentPart.name} image`}
               fill
               sizes="180px"

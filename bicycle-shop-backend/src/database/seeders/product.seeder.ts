@@ -20,6 +20,7 @@ export class ProductSeeder {
             description: 'An affordable bicycle for casual riders.',
             is_active: true,
             category: bicycleCategory,
+            image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/bike1.png`,
         });
 
         const proBicycle = productRepository.create({
@@ -27,6 +28,7 @@ export class ProductSeeder {
             description: 'A high-end bicycle for professional riders.',
             is_active: true,
             category: bicycleCategory,
+            image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/bike2.png`,
         });
 
         await productRepository.save([liteBicycle, proBicycle]);

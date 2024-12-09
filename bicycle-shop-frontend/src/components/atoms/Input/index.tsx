@@ -4,7 +4,15 @@ interface InputProps {
   id: string;
   name: string;
   label?: string;
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'date';
+  type?:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'number'
+    | 'tel'
+    | 'url'
+    | 'date'
+    | 'file';
   placeholder?: string;
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
