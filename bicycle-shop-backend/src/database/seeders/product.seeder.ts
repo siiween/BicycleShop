@@ -20,7 +20,6 @@ export class ProductSeeder {
         const bicyclesCategory = categories.find(cat => cat.name === 'Bicycles');
 
         const products = [
-            // Skates
             {
                 name: 'Urban Skate',
                 description: 'A durable skate for urban environments.',
@@ -42,7 +41,6 @@ export class ProductSeeder {
                 category: skatesCategory,
                 image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/skate3.png`,
             },
-            // Bicycles
             {
                 name: 'City Bike',
                 description: 'Ideal for commuting and city rides.',

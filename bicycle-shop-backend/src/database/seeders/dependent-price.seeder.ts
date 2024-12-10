@@ -50,7 +50,6 @@ export class DependentPriceSeeder {
                 conditionOption: redColor,
                 price: bicycleWheelsStandard.price + 10,
             },
-            // Mixto
             {
                 option: redColor,
                 conditionOption: skateWheelsPremium,

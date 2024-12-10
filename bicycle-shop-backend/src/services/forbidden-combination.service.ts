@@ -217,7 +217,6 @@ export class ForbiddenCombinationService {
                 continue;
             }
 
-            // Calcular el precio total de este producto
             let productPrice = 0;
             const appliedDependencies: Set<number> = new Set();
 
@@ -246,7 +245,6 @@ export class ForbiddenCombinationService {
             return { success: false, errors, totalPrice: 0 };
         }
 
-        // Actualizar el stock solo si no hay errores
         for (const { selectedOptionIds } of products) {
             for (const optionId of selectedOptionIds) {
                 await AppDataSource.getRepository(Option)
