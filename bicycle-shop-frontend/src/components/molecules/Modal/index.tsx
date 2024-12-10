@@ -10,7 +10,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ children, onClose, title }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white rounded-lg w-1/2 ">
+      <div className="bg-white rounded-lg md:w-1/2 w-full max-h-full">
         <div className="flex justify-between items-center border-b border-neutral-300 p-5">
           <Text as="h2" size="2xl" variant="primary" className="font-bold">
             {title || 'Modal'}

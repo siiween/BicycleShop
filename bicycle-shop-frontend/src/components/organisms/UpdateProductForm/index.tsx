@@ -103,8 +103,8 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
 
   return (
     <>
-      <div className="flex flex-row justify-between ">
-        <div className="flex flex-row gap-3 items-baseline">
+      <div className="flex flex-row justify-between items-center">
+        <div className="flex md:flex-row flex-col md:gap-3 items-baseline">
           <Text as="h1" size="3xl" variant="primary" className="font-bold">
             Edit Product:
           </Text>
@@ -112,7 +112,7 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
             {product.name}
           </Text>
         </div>
-        <div className="flex flex-row gap-6">
+        <div className="flex flex-row gap-6 h-fit">
           <Button variant="outline" onClick={handleDelete}>
             Delete
           </Button>
@@ -123,8 +123,8 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
         onSubmit={handleSubmit}
         className="bg-white rounded-lg border border-neutral-300"
       >
-        <div className="grid grid-cols-6 items-center">
-          <div className="col-span-1 relative aspect-square overflow-hidden">
+        <div className="grid md:grid-cols-6 items-center">
+          <div className="md:col-span-1 relative md:aspect-square aspect-video overflow-hidden">
             <Image
               src={product.image_url}
               alt={`${product.name} image`}
@@ -135,7 +135,7 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
             />
           </div>
 
-          <div className="col-span-5 grid grid-cols-2 gap-5 h-fit p-5">
+          <div className="md:col-span-5 grid grid-cols-2 gap-5 h-fit p-5">
             <div>
               <Input
                 placeholder="Name"

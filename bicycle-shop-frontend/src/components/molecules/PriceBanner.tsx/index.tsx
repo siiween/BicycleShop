@@ -42,7 +42,7 @@ const PriceBanner: React.FC<PriceBannerProps> = ({
   }, [selectedOptions]);
 
   return (
-    <div className="flex flex-col w-80 flex-shrink-0 p-3">
+    <div className="flex flex-col w-80 flex-shrink-0 md:p-3 p-0">
       <Text as="h2" size="lg" variant="primary" className="font-bold mb-5">
         This is your bike
       </Text>

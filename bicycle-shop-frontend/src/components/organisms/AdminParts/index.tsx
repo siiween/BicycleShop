@@ -12,7 +12,7 @@ interface AdminPartsProps {
 const AdminParts: React.FC<AdminPartsProps> = ({ parts }) => {
   return (
     <>
-      <div className="flex flex-row justify-between mb-5">
+      <div className="flex md:flex-row flex-col gap-3 justify-between mb-5">
         <Text as="h1" size="3xl" variant="primary" className="font-bold">
           All the parts in the shop
         </Text>
@@ -20,7 +20,7 @@ const AdminParts: React.FC<AdminPartsProps> = ({ parts }) => {
           <Button className="">Add Part</Button>
         </Link>
       </div>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-3 grid-cols-2 gap-5">
         {parts.map((part: Part) => (
           <PartAdminCard
             key={part.id}

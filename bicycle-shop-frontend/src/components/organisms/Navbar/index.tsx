@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
               Shop
             </Text>
 
-            <ul className="flex flex-row gap-5">
+            <ul className="flex flex-row md:gap-5 gap-3">
               <li>
                 <NavLink
                   title="Home"
@@ -40,13 +40,6 @@ const Navbar: React.FC = () => {
                   title="Admin"
                   active={pathname.startsWith('/admin')}
                   to="/admin"
-                />
-              </li>
-              <li>
-                <NavLink
-                  title="Contact"
-                  active={pathname.startsWith('/contact')}
-                  to="/contact"
                 />
               </li>
             </ul>

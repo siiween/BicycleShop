@@ -77,7 +77,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
           return (
             <div className="flex justify-between gap-2 px-5" key={option.id}>
               <Text variant="muted" size="sm">
-                {option.name}:
+                {option.name}
               </Text>
               <div className="flex flex-row gap-2">
                 <Text variant="muted" size="sm">

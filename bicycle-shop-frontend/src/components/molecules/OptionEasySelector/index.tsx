@@ -43,7 +43,7 @@ const OptionEasySelector: React.FC<OptionEasySelectorProps> = ({
       <Text as="h3" size="lg" variant="primary" className="font-bold mb-4">
         Select part
       </Text>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid md:grid-cols-4 grid-cols-2 gap-3">
         {parts.map((part) => (
           <Button
             variant={currentSelectedPart == part.id ? 'primary' : 'outline'}
@@ -68,7 +68,7 @@ const OptionEasySelector: React.FC<OptionEasySelectorProps> = ({
             Select option for{' '}
             {parts.find((p) => p.id == currentSelectedPart)?.name}
           </Text>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid md:grid-cols-4 grid-cols-2 gap-3">
             {availableOptions
               .filter((option) => !selection.find((o) => o.id == option.id))
               .map((option) => (

@@ -114,10 +114,10 @@ const Configurator: React.FC<ConfiguratorProps> = ({
     );
 
   return (
-    <div className="flex flex-row gap-10">
+    <div className="flex md:flex-row flex-col gap-10">
       <div className="flex flex-col grow">
-        <div className="grid grid-cols-5 gap-10">
-          <div className="col-span-2 relative aspect-square overflow-hidden">
+        <div className="grid md:grid-cols-5 gap-10">
+          <div className="md:col-span-2 relative md:aspect-square aspect-video overflow-hidden">
             <Image
               src={product.image_url}
               alt={`${currentPart.name} image`}
@@ -127,7 +127,7 @@ const Configurator: React.FC<ConfiguratorProps> = ({
               priority
             />
           </div>
-          <div className="flex flex-col justify-center col-span-3">
+          <div className="flex flex-col justify-center md:col-span-3">
             <Text as="h1" size="3xl" variant="primary" className="font-bold">
               {currentPart.name}
             </Text>

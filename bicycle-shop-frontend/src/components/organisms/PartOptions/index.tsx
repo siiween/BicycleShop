@@ -23,7 +23,7 @@ const PartOptions: React.FC<PartOptionsProps> = ({ options, partId }) => {
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-3 gap-5">
         {options.map((option: Option) => (
           <OptionAdminCard key={option.id} option={option} partId={partId} />
         ))}

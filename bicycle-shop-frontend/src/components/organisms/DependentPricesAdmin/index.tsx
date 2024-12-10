@@ -31,7 +31,7 @@ const DependentPricesAdmin: React.FC<DependentPricesAdminProps> = ({
           <Button onClick={() => setOpenModal(true)}>Add dependence</Button>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid md:grid-cols-4 grid-cols-1 gap-5">
         {dependentPrices.map((dependence: DependentPrice) => (
           <DependenceCard
             key={dependence.id}

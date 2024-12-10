@@ -12,7 +12,7 @@ interface AdminProductsProps {
 const AdminProducts: React.FC<AdminProductsProps> = ({ products }) => {
   return (
     <>
-      <div className="flex flex-row justify-between mb-5">
+      <div className="flex md:flex-row flex-col gap-3 justify-between mb-5">
         <Text as="h1" size="3xl" variant="primary" className="font-bold">
           All the products in the shop
         </Text>
@@ -20,7 +20,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ products }) => {
           <Button className="">Add Product</Button>
         </Link>
       </div>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-3 gap-5">
         {products.map((product: Product) => (
           <ProductAdminCard
             key={product.id}

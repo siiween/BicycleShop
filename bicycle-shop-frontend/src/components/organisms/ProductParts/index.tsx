@@ -43,7 +43,7 @@ const ProductParts: React.FC<ProductPartsProps> = ({
 
   return (
     <>
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex md:flex-row flex-col justify-between gap-3">
         <Text as="h2" size="2xl" variant="primary" className="font-bold">
           Associated parts
         </Text>
@@ -51,7 +51,7 @@ const ProductParts: React.FC<ProductPartsProps> = ({
           <Button onClick={() => setOpenModal(true)}>Associate a part</Button>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-3 gap-5">
         {parts.map((part: Part) => (
           <div
             key={part.id}

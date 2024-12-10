@@ -13,7 +13,7 @@ const ForbiddenCombinations: React.FC<ForbiddenCombinationsProps> = ({
 }) => {
   return (
     <>
-      <div className="flex flex-row justify-between mb-5">
+      <div className="flex md:flex-row flex-col gap-3 justify-between mb-5">
         <Text as="h1" size="3xl" variant="primary" className="font-bold">
           All the Forbidden combinations
         </Text>
@@ -21,7 +21,7 @@ const ForbiddenCombinations: React.FC<ForbiddenCombinationsProps> = ({
           <Button className="">Add a combination</Button>
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 gap-5">
         {forbiddenCombinations.map((combination: ForbiddenCombination) => (
           <ForbiddenCombinationCard
             key={combination.id}

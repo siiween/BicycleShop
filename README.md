@@ -92,7 +92,7 @@ The database consists of the following key entities and relationships:
 
 ### Technology Choices
 
-#### Why Next.js 14 with TypeScript?
+#### Why Next.js 14 with TypeScript and Tailwind?
 
 **TypeScript** was chosen for its type safety, improving code robustness and developer productivity. **Next.js 14** was selected over plain React for the following reasons:
 
@@ -101,6 +101,14 @@ The database consists of the following key entities and relationships:
 3. **Ease of Deployment**: Seamless integration with platforms like Vercel.
 4. **Security**: Server components and server actions allow sensitive logic to remain server-side.
 5. **Efficiency**: Features like `next/image` optimize image loading and delivery.
+
+**TailwindCSS** was chosen for its utility-first approach, which brings the following benefits:
+
+1. Rapid Development: Enables faster styling with a consistent and scalable design system directly in the HTML.
+2. Customizability: Highly configurable to align with the specific design needs of the project.
+3. Performance: Eliminates unused styles during build time, resulting in smaller CSS bundles.
+4. Developer Productivity: Removes context switching between HTML and CSS files, keeping focus on the component structure.
+5. Community and Ecosystem: A rich ecosystem of plugins and an active community ensure a wide range of pre-built solutions and continuous improvements.
 
 ---
 

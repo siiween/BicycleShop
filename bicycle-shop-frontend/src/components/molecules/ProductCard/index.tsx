@@ -27,9 +27,9 @@ const ProductCard: React.FC<ArtistCardProps> = ({
   return (
     <Link
       href={href}
-      className="grid grid-cols-5 items-center gap-5 w-full hover:bg-neutral-200 hover:shadow transition-all bg-neutral-100 rounded-lg border border-neutral-300"
+      className="grid md:grid-cols-5 items-center gap-5 w-full hover:bg-neutral-200 hover:shadow transition-all bg-neutral-100 rounded-lg border border-neutral-300"
     >
-      <div className="col-span-2 relative aspect-square overflow-hidden">
+      <div className="md:col-span-2 relative md:aspect-square aspect-video overflow-hidden">
         <Image
           src={imageUrl}
           alt={name + ' image'}
@@ -39,7 +39,7 @@ const ProductCard: React.FC<ArtistCardProps> = ({
           priority
         />
       </div>
-      <div className="w-full mt-2 col-span-3 p-5">
+      <div className="w-full mt-2 md:col-span-3 p-5">
         <Text
           as="h3"
           size="2xl"

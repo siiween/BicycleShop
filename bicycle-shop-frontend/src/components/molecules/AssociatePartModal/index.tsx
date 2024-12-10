@@ -51,7 +51,7 @@ const AssociatePartModal: React.FC<AssociatePartModalProps> = ({
   return (
     <Modal onClose={onClose} title="Select a part">
       <div>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-3 gap-5">
           {filteredAvailableParts.map((part: Part) => (
             <div
               key={part.id}

@@ -22,9 +22,9 @@ const ProductAdminCard: React.FC<ProductAdminCardProps> = ({
   return (
     <Link
       href={href}
-      className="grid grid-cols-6 items-center w-full hover:bg-neutral-200 hover:shadow transition-all bg-neutral-100 rounded-lg border border-neutral-300 h-fit"
+      className="grid md:grid-cols-6 items-center w-full hover:bg-neutral-200 hover:shadow transition-all bg-neutral-100 rounded-lg border border-neutral-300 h-fit"
     >
-      <div className="col-span-2 relative aspect-square overflow-hidden flex">
+      <div className="md:col-span-2 relative md:aspect-square aspect-video overflow-hidden flex">
         <Image
           src={imageUrl}
           alt={name + ' image'}
@@ -34,7 +34,7 @@ const ProductAdminCard: React.FC<ProductAdminCardProps> = ({
           priority
         />
       </div>
-      <div className="gap-5 p-5 col-span-4">
+      <div className="gap-5 p-5 md:col-span-4">
         <Text
           as="h3"
           size="2xl"

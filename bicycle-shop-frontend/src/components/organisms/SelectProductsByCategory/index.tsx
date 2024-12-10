@@ -15,13 +15,13 @@ const SelectProductsByCategory: React.FC<SelectProductsByCategoryProps> = ({
     <>
       <div className="border-b border-neutral-300 pb-5">
         <Text as="h1" size="3xl" variant="primary" className="font-bold">
-          Select a {category.name} to configure it
+          Select {category.name} to configure it
         </Text>
         <Text size="lg" variant="muted" className="mt-2">
           {category.description}
         </Text>
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
         {products.map((product: Product) => (
           <ProductCard
             key={product.id}
