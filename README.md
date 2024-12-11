@@ -141,7 +141,7 @@ The frontend is structured as follows:
 ## Project Setup
 
 
-Docker Setup (Recommended)
+### Docker Setup (Recommended)
 
 1. Build and start the services:
 
@@ -155,7 +155,44 @@ Docker Setup (Recommended)
     docker-compose exec backend sh -c "RUN_SEED=true npm run seed"
     ```
 
-### Local Setup
+
+### Monorepo Setup (Local Development)
+
+#### Requirements
+- Node.js (version 18 or higher)
+- npm (version 7 or higher to support workspaces)
+
+#### Steps
+
+1. Create environment files for both backend and frontend:
+
+   - **Backend (`bicycle-shop-backend/.env.local`)**:
+     ```bash
+     PORT=3030
+     MOCK_AWS=true
+     DB_TYPE=sqlite
+     DB_NAME=database.sqlite
+     ```
+
+   - **Frontend (`bicycle-shop-frontend/.env.local`)**:
+     ```bash
+     REACT_APP_API_URL=http://localhost:3030
+     ```
+2. Install dependencies for the entire monorepo:
+    ```bash
+    npm install
+    ```
+
+3. Seed the database (optional but recommended):
+   ```bash
+    npm run seed --workspace=bicycle-shop-backend
+    ```
+4. Start both backend and frontend services in parallel:
+    ```bash
+    npm run dev
+    ```
+
+### Local Setup (Withour monorepo)
 
 #### Frontend 
 

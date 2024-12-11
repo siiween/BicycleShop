@@ -1,0 +1,19 @@
+{
+  "name": "bicycleshop",
+  "version": "1.0.0",
+  "workspaces": [
+    "bicycle-shop-backend",
+    "bicycle-shop-frontend"
+  ],
+  "description": "## Table of Contents",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w bicycle-shop-backend\" \"npm run dev -w bicycle-shop-frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
