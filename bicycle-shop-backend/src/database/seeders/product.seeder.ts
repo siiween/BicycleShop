@@ -19,48 +19,50 @@ export class ProductSeeder {
         const skatesCategory = categories.find(cat => cat.name === 'Skates');
         const bicyclesCategory = categories.find(cat => cat.name === 'Bicycles');
 
+        const url = `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT ?? 3030}/uploads`;
+
         const products = [
             {
                 name: 'Urban Skate',
                 description: 'A durable skate for urban environments.',
                 is_active: true,
                 category: skatesCategory,
-                image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/skate1.png`,
+                image_url: `${url}/skate1.png`,
             },
             {
                 name: 'Freestyle Skate',
                 description: 'Perfect for tricks and freestyle moves.',
                 is_active: true,
                 category: skatesCategory,
-                image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/skate2.png`,
+                image_url: `${url}/skate2.png`,
             },
             {
                 name: 'Speed Skate',
                 description: 'Designed for speed and performance.',
                 is_active: true,
                 category: skatesCategory,
-                image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/skate3.png`,
+                image_url: `${url}/skate3.png`,
             },
             {
                 name: 'City Bike',
                 description: 'Ideal for commuting and city rides.',
                 is_active: true,
                 category: bicyclesCategory,
-                image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/bike1.png`,
+                image_url: `${url}/bike1.png`,
             },
             {
                 name: 'Mountain Bike',
                 description: 'Perfect for off-road and trail adventures.',
                 is_active: true,
                 category: bicyclesCategory,
-                image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/bike2.png`,
+                image_url: `${url}/bike2.png`,
             },
             {
                 name: 'Road Bike',
                 description: 'Lightweight and aerodynamic for road biking.',
                 is_active: true,
                 category: bicyclesCategory,
-                image_url: `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/bike3.png`,
+                image_url: `${url}/bike3.png`,
             },
         ];
 

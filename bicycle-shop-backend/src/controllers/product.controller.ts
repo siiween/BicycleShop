@@ -36,7 +36,7 @@ export class ProductController {
         try {
 
             const { file } = req;
-            const imageUrl = file ? await uploadImage(file) : `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT}/uploads/default.png`;
+            const imageUrl = file ? await uploadImage(file) : `${process.env.BACKEND_URL ?? "http://localhost"}:${process.env.PORT ?? 3030}/uploads/default.png`;
 
             const product = await ProductService.createProduct({ ...req.body }, imageUrl);
 
